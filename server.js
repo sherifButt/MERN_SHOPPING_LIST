@@ -27,10 +27,10 @@ async function dbConnect() {
 // User Routes
 app.use('/api/items',items)
 
-app.get('/', (req, res) => {
-   console.log({ body: req.body })
-   res.json({ body: req.body })
-})
+// app.get('/', (req, res) => {
+//    console.log({ body: req.body })
+//    res.json({ body: req.body })
+// })
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => { console.log(`Listening on port ${ port } on http://localhost:${ port }`) })
