@@ -7,6 +7,8 @@ import {
 } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { v4 as uuid } from 'uuid';
+ 
+import {useSelector} from 'react-redux'
 
 const ShoppingList = () => {
 
@@ -20,6 +22,7 @@ const ShoppingList = () => {
    }
 
    const [items, setItems] = useState(initialState);
+   // const items = useSelector(state => state.item)
 
    useEffect(() => {
       console.log(items.items)
