@@ -10,7 +10,7 @@ const Item = require('../../models/Item')
 router.get('/', async (req, res) => {
    try {
       const items = await Item.find().sort({ date: -1 })
-      res.json({ items })
+      res.json(items)
    } catch (err) {
       console.log(`Error geting data form DB`)
    }
@@ -24,10 +24,39 @@ router.post('/', async (req, res) => {
       const newItems = new Item({
          name: req.body.name
       })
-       
       const savedItem = await newItems.save()
-      res.json({ savedItem })
+      res.json(savedItem)
+
+   } catch (err) {
+      console.log(`Error geting data form DB`)
+   }
+})
+
+
+// @route DELETE api/item/id
+// @desc Delete a Post object
+// @access Public
+router.delete('/:id', async (req, res) => {
+   
+   try {
+      // find item in database
+      const item = await Item.findById(req.params.id)
       
+      if (item) {
+         await item.remove()
+         res.json({
+            delete: item,
+            success: true,
+            message: `Post #[${ req.params.id}] deleted successfully`
+         })
+      } else {
+         res.json({
+            success: false,
+         message: `item #[${req.params.id}] dosnot exist, nothing to delete`})
+      }
+
+      // const savedItem = await newItems.save()
+
    } catch (err) {
       console.log(`Error geting data form DB`)
    }
