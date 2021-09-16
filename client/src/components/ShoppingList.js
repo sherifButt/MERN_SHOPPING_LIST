@@ -31,14 +31,35 @@ const ShoppingList = () => {
          <Button
             color="dark"
             style={{ marginBottom: '2rem' }}
-            onClick={ () => {
-               const name =  prompt('Enter Item')
+            onClick={() => {
+               const name = prompt('Enter Item')
                name && setItems({
                   items: [...items.items, { id: uuid(), name }]
                })
-               console.log( items)
             }}
-         >Add Item</Button>
+         >
+            Add Item
+         </Button>
+         <ListGroup>
+            <TransitionGroup className="shopping-list">
+               {items.items.map(({ id, name }) => (
+                  <CSSTransition key={id} timeout={500} classNames="fade">
+                     <ListGroupItem>
+                        <Button
+                           className="remove-btn"
+                           color="danger"
+                           size="sm"
+                           onClick={() => {
+                              const newItems = items.items.filter(item => item.id !== id)
+                              setItems({items:newItems})  
+                            }}
+                        >&times;</Button>
+                        {name}
+                     </ListGroupItem>
+                  </CSSTransition>
+               ))}
+            </TransitionGroup>
+         </ListGroup>
       </Container>
    )
 }
