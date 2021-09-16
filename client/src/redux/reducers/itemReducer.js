@@ -1,4 +1,5 @@
-import { v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid'
+import { actionTypes } from '../constants/actionTypes'
 const initialState = {
    items: [
       { id: uuid(), name: 'Eggs' },
@@ -9,7 +10,15 @@ const initialState = {
 }
 const itemReducer = (state = initialState, { type, payload }) => {
    switch (type) {
-      case 'A': return state
+      case actionTypes.GET_ITEMS: return { ...state }
+      case actionTypes.ADD_ITEM: return {
+         items: [...state.items, { id: uuid(), name: payload }]
+      }
+      case actionTypes.DELETE_ITEM: {
+         return { items: state.items.filter(item => item.id !== payload) }
+         
+      }
+
       default: return state
    }
 }
