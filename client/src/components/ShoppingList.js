@@ -6,30 +6,14 @@ import {
    ListGroupItem,
 } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { v4 as uuid } from 'uuid';
  
 import { useSelector,useDispatch } from 'react-redux'
-import { getItems,addItem,deleteItem } from '../redux/actions/itemActions'
+import { addItem,deleteItem } from '../redux/actions/itemActions'
 
 const ShoppingList = () => {
 
-   const initialState = {
-      items: [
-         { id: uuid(), name: 'Eggs' },
-         { id: uuid(), name: 'Milk' },
-         { id: uuid(), name: 'Pizza' },
-         { id: uuid(), name: 'Mozzarilla' },
-      ],
-   }
-
-   const [items, setItems] = useState(initialState);
-   const items_ = useSelector(state => state.item)
+   const items = useSelector(state => state.item.items)
    const dispatch = useDispatch()
-
-   useEffect(() => {
-      console.log(items_,items)
-   }, [])
-
 
    return (
       <Container>
@@ -44,7 +28,7 @@ const ShoppingList = () => {
          </Button>
          <ListGroup>
             <TransitionGroup className="shopping-list">
-               {items_.items.map(({ id, name }) => (
+               {items.map(({ id, name }) => (
                   <CSSTransition key={id} timeout={500} classNames="fade">
                      <ListGroupItem>
                         <Button

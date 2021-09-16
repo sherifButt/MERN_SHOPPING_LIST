@@ -6,14 +6,14 @@ export const getItems = () => {
    }
 }
 
-export const addItem = (name) => {
+export const addItem = name => {
    return {
       type: actionTypes.ADD_ITEM,
       payload: name,
    }
 }
 
-export const deleteItem = (id) => {
+export const deleteItem = id => {
    return {
       type: actionTypes.DELETE_ITEM,
       payload: id,
