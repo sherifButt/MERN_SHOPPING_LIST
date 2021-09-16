@@ -37,22 +37,22 @@ router.post('/', async (req, res) => {
 // @desc Delete a Post object
 // @access Public
 router.delete('/:id', async (req, res) => {
-   
+
    try {
       // find item in database
       const item = await Item.findById(req.params.id)
-      
+
       if (item) {
          await item.remove()
-         res.json({
-            delete: item,
+         res.status(200).json({
             success: true,
-            message: `Post #[${ req.params.id}] deleted successfully`
+            message: `Post #[${ req.params.id }] deleted successfully`
          })
       } else {
-         res.json({
+         res.status(404).json({
             success: false,
-         message: `item #[${req.params.id}] dosnot exist, nothing to delete`})
+            message: `item #[${ req.params.id }] dosnot exist, nothing to delete`
+         })
       }
 
       // const savedItem = await newItems.save()
