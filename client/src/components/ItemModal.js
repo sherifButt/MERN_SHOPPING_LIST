@@ -1,31 +1,34 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../redux/actions/itemActions"
+import InputField from "./form/InputField";
 import {
    Button,
    Modal,
    ModalHeader,
    ModalBody,
-   ModalFooter,
-   Label,
-   Input,
-   FormGroup,
    Form,
-   Col,
-   Row,
 } from "reactstrap";
 
 const ItemModal = ({ buttonLabel, className }) => {
-   // Modal controll
+   // redux
+	const dispatch = useDispatch();
+	// Modal controll
    const [modal, setModal] = useState(false);
-   const [open, setOpen] = useState(false);
-   const [focusAfterClose, setFocusAfterClose] = useState(true);
+   const [inputName, setInputName] = useState("");
+
    const toggle = () => setModal(!modal);
    const closeBtn = (
       <button className="close" onClick={toggle}>
          &times;
       </button>
    );
-   const handleSelectChange = ({ target: { value } }) => {
-      setFocusAfterClose(JSON.parse(value));
+
+   const handleSubmit = e => {
+		e.preventDefault();
+		dispatch(addItem(inputName))
+		toggle();
+		setInputName('')
    };
 
    return (
@@ -33,23 +36,25 @@ const ItemModal = ({ buttonLabel, className }) => {
          <Button color="dark" onClick={toggle}>
             {buttonLabel}
          </Button>
-         <Modal autoFocus="true" isOpen={modal} toggle={toggle} className={className}>
+         <Modal isOpen={modal} toggle={toggle} className={className}>
             <ModalHeader toggle={toggle} close={closeBtn}>
                ADD ITEM
             </ModalHeader>
             <ModalBody>
-               <Form onSubmit={(e) => e.preventDefault()}>
-                  <FormGroup>
-                     <Label for="item">Item</Label>
-                     <Input
-                        type="text"
-                        id="item"
-                        placeholder="Add shopping item"
-                        onChange={handleSelectChange}></Input>
-                  </FormGroup>
-                     <Button block color="dark" style={{ marginTop: "2rem" }} onClick={toggle} >
-                        Add Item	
-                     </Button>
+               <Form
+                  onSubmit={e => {
+                     e.preventDefault();
+                  }}>
+                  <InputField
+                     id="item"
+                     input={inputName}
+                     setInput={setInputName}
+                     labelName="name"
+                  />
+
+                  <Button color="dark" style={{ marginTop: "2rem" }} onClick={handleSubmit} block>
+                     Add Item
+                  </Button>
                </Form>
             </ModalBody>
          </Modal>
