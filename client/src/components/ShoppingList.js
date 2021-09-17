@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import {
    Button,
@@ -6,7 +7,11 @@ import {
    ListGroupItem,
 } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
- 
+
+// COMPONNETNT
+import ItemModal from './ItemModal';
+
+// REDUX
 import { useSelector,useDispatch } from 'react-redux'
 import { addItem,deleteItem } from '../redux/actions/itemActions'
 
@@ -17,6 +22,7 @@ const ShoppingList = () => {
 
    return (
       <Container>
+         <ItemModal buttonLabel="Add Item"/>
          <Button
             color="dark"
             style={{ marginBottom: '2rem' }}
