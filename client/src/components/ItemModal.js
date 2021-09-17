@@ -1,34 +1,60 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
    Button,
    Modal,
    ModalHeader,
    ModalBody,
-   ModalFooter
-} from 'reactstrap';
+   ModalFooter,
+   Label,
+   Input,
+   FormGroup,
+   Form,
+   Col,
+   Row,
+} from "reactstrap";
 
 const ItemModal = ({ buttonLabel, className }) => {
-   
    // Modal controll
    const [modal, setModal] = useState(false);
+   const [open, setOpen] = useState(false);
+   const [focusAfterClose, setFocusAfterClose] = useState(true);
    const toggle = () => setModal(!modal);
-   const closeBtn = <button className="close" onClick={toggle}>&times;</button>;
+   const closeBtn = (
+      <button className="close" onClick={toggle}>
+         &times;
+      </button>
+   );
+   const handleSelectChange = ({ target: { value } }) => {
+      setFocusAfterClose(JSON.parse(value));
+   };
 
    return (
       <div>
-         <Button color="dark" onClick={toggle}>{buttonLabel}</Button>
-         <Modal autoFocus="true"  isOpen={modal} toggle={toggle} className={className}>
-            <ModalHeader toggle={toggle} close={closeBtn}>ADD ITEM</ModalHeader>
+         <Button color="dark" onClick={toggle}>
+            {buttonLabel}
+         </Button>
+         <Modal autoFocus="true" isOpen={modal} toggle={toggle} className={className}>
+            <ModalHeader toggle={toggle} close={closeBtn}>
+               ADD ITEM
+            </ModalHeader>
             <ModalBody>
-               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+               <Form onSubmit={(e) => e.preventDefault()}>
+                  <FormGroup>
+                     <Label for="item">Item</Label>
+                     <Input
+                        type="text"
+                        id="item"
+                        placeholder="Add shopping item"
+                        onChange={handleSelectChange}></Input>
+                  </FormGroup>
+                     <Button block color="dark" style={{ marginTop: "2rem" }} onClick={toggle} >
+                        Add Item	
+                     </Button>
+               </Form>
             </ModalBody>
-            <ModalFooter>
-               <Button color="primary" onClick={toggle}>ADD</Button>{' '}
-               <Button color="secondary" onClick={toggle}>Cancel</Button>
-            </ModalFooter>
          </Modal>
       </div>
-   )
-}
+   );
+};
 
 export default ItemModal;

@@ -1,35 +1,28 @@
-
-import { useState, useEffect } from 'react';
-import {
-   Button,
-   Container,
-   ListGroup,
-   ListGroupItem,
-} from 'reactstrap';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useState, useEffect } from "react";
+import { Button, Container, ListGroup, ListGroupItem } from "reactstrap";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 // COMPONNETNT
-import ItemModal from './ItemModal';
+import ItemModal from "./ItemModal";
 
 // REDUX
-import { useSelector,useDispatch } from 'react-redux'
-import { addItem,deleteItem } from '../redux/actions/itemActions'
+import { useSelector, useDispatch } from "react-redux";
+import { addItem, deleteItem } from "../redux/actions/itemActions";
 
 const ShoppingList = () => {
-
-   const items = useSelector(state => state.item.items)
-   const dispatch = useDispatch()
+   const items = useSelector((state) => state.item.items);
+   const dispatch = useDispatch();
 
    return (
       <Container>
-         <ItemModal buttonLabel="Add Item"/>
+         <ItemModal buttonLabel="Add Item" />
          <Button
             color="dark"
-            style={{ marginBottom: '2rem' }}
+            style={{ marginBottom: "2rem" }}
             onClick={() => {
-               const name = prompt('Enter Item')
-               name && dispatch(addItem(name))}}
-         >
+               const name = prompt("Enter Item");
+               name && dispatch(addItem(name));
+            }}>
             Add Item
          </Button>
          <ListGroup>
@@ -41,8 +34,11 @@ const ShoppingList = () => {
                            className="remove-btn"
                            color="danger"
                            size="sm"
-                           onClick={() => {dispatch(deleteItem(id))}}
-                        >&times;</Button>
+                           onClick={() => {
+                              dispatch(deleteItem(id));
+                           }}>
+                           &times;
+                        </Button>
                         {name}
                      </ListGroupItem>
                   </CSSTransition>
@@ -50,7 +46,7 @@ const ShoppingList = () => {
             </TransitionGroup>
          </ListGroup>
       </Container>
-   )
-}
+   );
+};
 
 export default ShoppingList;
