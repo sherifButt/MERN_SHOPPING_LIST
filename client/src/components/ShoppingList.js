@@ -16,15 +16,6 @@ const ShoppingList = () => {
    return (
       <Container>
          <ItemModal buttonLabel="Add Item" />
-         <Button
-            color="dark"
-            style={{ marginBottom: "2rem" }}
-            onClick={() => {
-               const name = prompt("Enter Item");
-               name && dispatch(addItem(name));
-            }}>
-            Add Item
-         </Button>
          <ListGroup>
             <TransitionGroup className="shopping-list">
                {items.map(({ id, name }) => (
