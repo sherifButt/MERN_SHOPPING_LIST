@@ -23,7 +23,7 @@ const itemReducer = (state = initialState, { type, payload }) => {
       case actionTypes.DELETE_ITEM: {
          return {
             ...state,
-            items: state.items.filter(item => item.id !== payload),
+            items: state.items.filter(item => item._id !== payload),
          };
       }
       case actionTypes.ITEMS_LOADING:

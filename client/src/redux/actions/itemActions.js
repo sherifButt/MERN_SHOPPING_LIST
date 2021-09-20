@@ -14,23 +14,29 @@ export const getItems = () => async dispatch => {
    }
 };
 
-export const addItem =  name => async dispatch => {
+export const addItem = name => async dispatch => {
    try {
       const res = await axios.post('/api/items', name);
-       await dispatch({
+      await dispatch({
          type: actionTypes.ADD_ITEM,
-         payload: res.data
-      })
+         payload: res.data,
+      });
    } catch (err) {
       console.log('Error dispatching ADD_ITEM: ', err);
    }
 };
 
-export const deleteItem = id => async dispatch => {
-   return {
-      type: actionTypes.DELETE_ITEM,
-      payload: id,
-   };
+export const deleteItem = _id => async dispatch => {
+   try {
+      await axios.delete('/api/items/' + _id);
+      dispatch({
+         type: actionTypes.DELETE_ITEM,
+         payload: _id
+      })
+
+   } catch (err) {
+      console.log('Error dispatching DELETE_ITEM: ', err);
+   }
 };
 
 export const setItemsLoading = () => {

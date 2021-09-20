@@ -15,7 +15,7 @@ const ShoppingList = () => {
    // const [_items,set_Items] = useState({})
    const dispatch = useDispatch();
    
-   console.log('===>',items);
+   console.log('=>',items);
    useEffect( () => {
        dispatch(getItems());
    }, []);
