@@ -1,9 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItem } from "../redux/actions/itemActions";
 import InputField from "./form/InputField";
 import { Button, Modal, ModalHeader, ModalBody, Form } from "reactstrap";
-
 const ItemModal = ({ buttonLabel, className }) => {
    // redux
    const dispatch = useDispatch();
@@ -15,7 +14,7 @@ const ItemModal = ({ buttonLabel, className }) => {
 
    const handleSubmit = e => {
       e.preventDefault();
-      dispatch(addItem(inputName));
+      inputName && dispatch(addItem({name:inputName}));
       toggle();
       setInputName("");
    };
@@ -38,7 +37,6 @@ const ItemModal = ({ buttonLabel, className }) => {
                      setInput={setInputName}
                      labelName="name"
                   />
-
                   <Button color="dark" style={{ marginTop: "2rem" }} onClick={handleSubmit} block>
                      Add Item
                   </Button>

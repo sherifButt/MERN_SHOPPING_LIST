@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { Input, Label, FormGroup, Form } from "reactstrap";
+import { Input, Label, FormGroup } from "reactstrap";
 
 const InputField = ({ placeholder, labelName, input, setInput, id,type }) => {
-   const [inputValue, setInputValue] = useState();
+   
 
    return (
       <FormGroup>

@@ -1,29 +1,36 @@
-import { v4 as uuid } from "uuid";
 import { actionTypes } from "../constants/actionTypes";
+
 const initialState = {
-   items: [
-      { id: uuid(), name: "Eggs" },
-      { id: uuid(), name: "Milk" },
-      { id: uuid(), name: "Pizza" },
-      { id: uuid(), name: "Candys" },
-   ],
+   items: [],
+   loading: actionTypes.ITEMS_LOADING,
 };
+
 const itemReducer = (state = initialState, { type, payload }) => {
    switch (type) {
       case actionTypes.GET_ITEMS:
-         return { ...state };
-      case actionTypes.ADD_ITEM:
          return {
             ...state,
-            items: [...state.items, { id: uuid(), name: payload }],
+            items: payload,
+            loading: false,
          };
+      case actionTypes.ADD_ITEM:
+         return payload
+            ? {
+                 ...state,
+                 items: [payload, ...state.items],
+              }
+            : { ...state };
       case actionTypes.DELETE_ITEM: {
          return {
             ...state,
-            items: state.items.filter((item) => item.id !== payload),
+            items: state.items.filter(item => item.id !== payload),
          };
       }
-
+      case actionTypes.ITEMS_LOADING:
+         return {
+            ...state,
+            loading: true,
+         };
       default:
          return state;
    }
