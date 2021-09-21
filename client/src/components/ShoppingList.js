@@ -15,14 +15,16 @@ const ShoppingList = () => {
    const dispatch = useDispatch();
 
    console.log('=>', items);
-   useEffect(() => {
-      dispatch(getItems());
+   useEffect(async () => {
+      await dispatch(getItems());
    }, []);
 
    return (
       <DragDropContext
-         onDragEnd={(...props) => {
-            console.log(props);
+         onDragEnd={(param) => {
+            const srcI = param.source.index;
+            const desI = param.destination.index;
+            console.log(srcI,desI)
          }}>
          <Container>
             <ItemModal buttonLabel="Add Item" />
