@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-exports.config =  {
+module.exports.config =  {
    PRODUCTION: process.env.PRODUCTION,
    PORT: process.env.PORT,
    MONGO_URI: process.env.MONGO_URI,
