@@ -1,36 +1,35 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
-
-const items = require('./routes/api/items')
+const path = require('path');
 
 const app = express();
+const items = require('./routes/api/items');
 
 // BodyParser middleware
-app.use(express.json())
+app.use(express.json());
 
 // DB config
 const db = require('./config/keys').mongoURI;
-
 // Connect to mongoose server
-dbConnect()
-async function dbConnect() {
-   try {
-      const connection = await mongoose.connect(db)
-      const dbInfo = connection.connections[0]
-      console.log(`MongoDB Connected to ... ${dbInfo.name}`)
-   } catch (err) {
-      console.error(`Error connecting to mongodb: ${ err }`)
-   }
-}
+mongoose
+   .connect(db)
+   .then(() => console.log(`MongoDB Connected to ...`))
+   .catch(err => console.error(`Error connecting to mongodb: ${err}`));
 
 // User Routes
-app.use('/api/items',items)
+app.use('/api/items', items);
 
-// app.get('/', (req, res) => {
-//    console.log({ body: req.body })
-//    res.json({ body: req.body })
-// })
+// Serve static assets if in production
+if (process.env.production === 'production') {
+   // Set static foloder
+   app.use(express.static(path.join('client/build')));
+   app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'client','build','index.html'));
+   })
+}
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => { console.log(`Listening on port ${ port } on http://localhost:${ port }`) })
+app.listen(port, () => {
+   console.log(`Listening on port ${port} on http://localhost:${port}`);
+});
