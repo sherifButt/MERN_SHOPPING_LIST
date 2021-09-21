@@ -1,4 +1,5 @@
-require('dotenv').config();
+const { PORT, PRODUCTION } = require('./config').config; 
+
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -21,15 +22,15 @@ mongoose
 app.use('/api/items', items);
 
 // Serve static assets if in production
-if (process.env.production === 'production') {
+if (PRODUCTION === 'production') {
    // Set static foloder
    app.use(express.static(path.join('client/build')));
    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'client','build','index.html'));
-   })
+      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+   });
 }
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-   console.log(`Listening on port ${port} on http://localhost:${port}`);
+
+app.listen(PORT, () => {
+   console.log(`Listening on PORT ${PORT} on http://localhost:${PORT}`);
 });
