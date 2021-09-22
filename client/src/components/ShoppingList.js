@@ -17,9 +17,7 @@ const ShoppingList = () => {
    console.log('=>', items);
 
    useEffect( () => {
-
         (async () =>  await dispatch(getItems()))()
-      
    }, []);
 
    return (

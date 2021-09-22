@@ -1,11 +1,10 @@
-const { PORT, NODE_ENV } = require('./config').config; 
+const { PORT, NODE_ENV } = require('./config').config;
 
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 
 const app = express();
-const items = require('./routes/api/items');
 
 // BodyParser middleware
 app.use(express.json());
@@ -19,7 +18,8 @@ mongoose
    .catch(err => console.error(`Error connecting to mongodb: ${err}`));
 
 // User Routes
-app.use('/api/items', items);
+app.use('/api/items', require('./routes/api/items'));
+app.use('/api/users', require('./routes/api/users'));
 
 // Serve static assets if in production
 if (NODE_ENV === 'production') {
@@ -29,7 +29,6 @@ if (NODE_ENV === 'production') {
       res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
    });
 }
-
 
 app.listen(PORT, () => {
    console.log(`Listening on PORT ${PORT} on http://localhost:${PORT}`);
