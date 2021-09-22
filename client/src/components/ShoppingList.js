@@ -15,16 +15,19 @@ const ShoppingList = () => {
    const dispatch = useDispatch();
 
    console.log('=>', items);
-   useEffect(async () => {
-      await dispatch(getItems());
+
+   useEffect( () => {
+
+        (async () =>  await dispatch(getItems()))()
+      
    }, []);
 
    return (
       <DragDropContext
-         onDragEnd={(param) => {
+         onDragEnd={param => {
             const srcI = param.source.index;
-            const desI = param.destination.index;
-            console.log(srcI,desI)
+            const desI = param.destination?param.destination.index:null;
+            console.log(srcI, desI);
          }}>
          <Container>
             <ItemModal buttonLabel="Add Item" />
@@ -47,11 +50,10 @@ const ShoppingList = () => {
                                                 : 'none',
                                              borderRadius: snapshot.isDragging ? '5px' : 'none',
                                           }}>
-                                          <ListGroupItem className="mb-2">
-                                             <span {...provided.dragHandleProps} color="light">
-                                                {' '}
-                                                =
-                                             </span>
+                                          <ListGroupItem
+                                             {...provided.dragHandleProps}
+                                             className="mb-2">
+                                             <span color="light"> =</span>
                                              <Button
                                                 className="remove-btn ml-3"
                                                 color="danger"

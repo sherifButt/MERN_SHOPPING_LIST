@@ -10,7 +10,7 @@ const InputField = ({ placeholder, labelName, input, setInput, id,type }) => {
             id={id && id}
             type={type && type}
             placeholder={placeholder}
-            autoFocus={true}
+            autoFocus
             onChange={e => {
                setInput && setInput(e.target.value);
             }}
