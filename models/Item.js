@@ -7,6 +7,9 @@ const ItemSchema = new Schema({
       type: String,
       required: true
    },
+   index: {
+      type: Number,
+   },
    date: {
       type: Date,
       default: Date.now

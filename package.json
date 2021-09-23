@@ -4,12 +4,12 @@
   "description": "Shopping list built with the MERN stack _",
   "main": "server.js",
   "scripts": {
-    "client-install":"npm install --prefix cleint",
+    "client-install": "npm install --prefix cleint",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client":"npm start --prefix client",
-    "dev":"concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild" :"NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [
     "shopping",
@@ -18,6 +18,7 @@
   "author": "Sherif Butt",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "concurrently": "^6.2.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
