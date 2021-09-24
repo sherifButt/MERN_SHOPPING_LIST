@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const User = require('../../models/User');
+const auth = require('../../middleware/auth');
 
 const route = express.Router();
 
@@ -50,6 +51,27 @@ route.post('/', async (req, res) => {
          user: { id: user.id, name: user.name, email: user.email },
          message: `User [${user.email}] has logged in succefuly.`,
       });
+   } catch (e) {
+      console.log(`Error while Authenticating user! ${e.message}`);
+      res.status(400).json({
+         success: false,
+         message: `Error while Authenticating user! ${e.message}`,
+      });
+   }
+});
+
+/**
+ * @route GET api/auth/user
+ * @desc Get user information
+ * @acess Private
+ */
+route.get('/user', auth, async (req, res) => {
+   try {
+      const id = req.user.id;
+      const user = await User.findById(id).select('-password');
+      if (!user) throw Error('User not found')
+      
+      res.status(200).json({ user });
    } catch (e) {
       console.log(`Error while Authenticating user! ${e.message}`);
       res.status(400).json({

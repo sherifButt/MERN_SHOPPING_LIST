@@ -15,7 +15,6 @@ function App() {
       <Provider store={store}>
         <AppNavbar />
         <ShoppingList />
-        
       </Provider>
     </div>
   );

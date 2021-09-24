@@ -10,19 +10,20 @@ export const getItems = () => async dispatch => {
          payload: res.data,
       });
    } catch (err) {
-      console.log('Error dispatching GET_ITEMS: ', err);
+      console.log('Error dispatching GET_ITEMS: ', err.response.data.message, err);
    }
 };
 
 export const addItem = name => async dispatch => {
    try {
       const res = await axios.post('/api/items', name);
-      await dispatch({
+      
+       dispatch({
          type: actionTypes.ADD_ITEM,
          payload: res.data,
       });
    } catch (err) {
-      console.log('Error dispatching ADD_ITEM: ', err);
+      console.log('Error dispatching ADD_ITEM : ' , err.response.data.message,err);
    }
 };
 
@@ -35,7 +36,7 @@ export const deleteItem = _id => async dispatch => {
       })
 
    } catch (err) {
-      console.log('Error dispatching DELETE_ITEM: ', err);
+      console.log('Error dispatching DELETE_ITEM: ', err.response.data.message, err);
    }
 };
 

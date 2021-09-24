@@ -13,7 +13,10 @@ const auth = async (req, res, next) => {
       req.user = decoded;
       next();
    } catch (e) {
-      res.status(400).json({ message: `Tocken Error: ${e.message}` });
+      res.status(401).json({
+         success: false,
+         message: `Tocken Error: ${ e.message }`
+      });
       console.error(`Tocken Error: ${e.message}`);
    }
 };
