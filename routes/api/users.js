@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // User Model
 const User = require('../../models/User');
@@ -73,10 +74,22 @@ router.post('/', async (req, res) => {
       // save new user to db
       const savedUser = await newUser.save();
       // send responce to client
+
+      // JWT token
+      const token = await jwt.sign({ id: savedUser.id }, process.env.JWT_SECRET, {
+         expiresIn: 3600,
+      });
+      if (!token) throw Error(`Somthing went Wrong with token.`);
+
       res.status(200).json({
+         token,
+         user: {
+            id: savedUser.id,
+            name: savedUser.name,
+            email: savedUser.email,
+         },
          success: true,
          message: `user ${savedUser.email} saved successfully`,
-         user: savedUser,
       });
    } catch (e) {
       console.log(`Error while regestring user! ${e.message}`);
