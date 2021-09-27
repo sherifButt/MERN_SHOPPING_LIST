@@ -14,7 +14,7 @@ const ShoppingList = () => {
    const items = useSelector(state => state.item.items);
    const dispatch = useDispatch();
 
-   console.log('=>', items);
+   
 
    useEffect( () => {
         (async () =>  await dispatch(getItems()))()
@@ -25,7 +25,7 @@ const ShoppingList = () => {
          onDragEnd={param => {
             const srcI = param.source.index;
             const desI = param.destination?param.destination.index:null;
-            console.log(srcI, desI);
+            
          }}>
          <Container>
             <ItemModal buttonLabel="Add Item" />
