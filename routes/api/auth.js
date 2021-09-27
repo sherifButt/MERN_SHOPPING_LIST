@@ -67,10 +67,15 @@ route.post('/', async (req, res) => {
  */
 route.get('/user', auth, async (req, res) => {
    try {
+      // get id from user object stored in request comming from auth middleware.
       const id = req.user.id;
+      if(!id) throw Error(`No id provided in req.user Object.`)
+      
+      // get user data from database
       const user = await User.findById(id).select('-password');
       if (!user) throw Error('User not found')
       
+      // send user object as json to client
       res.status(200).json({ user });
    } catch (e) {
       console.log(`Error while Authenticating user! ${e.message}`);
