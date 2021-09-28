@@ -16,7 +16,8 @@ router.get('/', async (req, res) => {
       console.log(`Error geting data form DB! ${e}`);
       res.status(404).json({
          success: false,
-         message: `Error geting data form DB! ${e}`,
+         msg: `Error geting data form DB! ${ e }`,
+         status: 404
       });
    }
 });
@@ -35,7 +36,8 @@ router.post('/',auth, async (req, res) => {
       console.log(`Error geting data form DB ${e}`);
       res.status(400).json({
          success: false,
-         message: `Error geting data form DB! ${e}`,
+         msg: `Error geting data form DB! ${ e }`,
+         status: 400
       });
    }
 });
@@ -53,7 +55,8 @@ router.delete('/:id',auth, async (req, res) => {
       await item.remove();
       res.status(200).json({
          success: true,
-         message: `Post #[${req.params.id}] deleted successfully`,
+         msg: `Post #[${ req.params.id }] deleted successfully`,
+         status: 200
       });
 
       // const savedItem = await newItems.save()
@@ -61,7 +64,8 @@ router.delete('/:id',auth, async (req, res) => {
       console.log(`Error geting data form DB`);
       res.status(400).json({
          success: false,
-         message: `Error geting data form DB! ${e}`,
+         message: `Error geting data form DB! ${ e }`,
+         status:400
       });
    }
 });

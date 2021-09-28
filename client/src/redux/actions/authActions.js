@@ -1,0 +1,56 @@
+import actionTypes from '../constants/actionTypes';
+import axios from 'axios';
+import { returnErrors } from '../actions/errorActions';
+
+// check tocken and load user
+export const loadUser = () => async (dispatch, getState) => {
+   // User loading
+   // dispatch({ type: actionTypes.USER_LOADING });
+
+   // get token from localStorage
+   // const token = getState().auth.token;
+
+   // headers
+   // const config = {
+   //    headers: { 'Content-Type': 'application/json' },
+   // };
+
+   // if (!token) {
+   //    dispatch(returnErrors('Token not found', 401 ));
+   //    dispatch({ type: actionTypes.AUTH_ERROR });
+   //    return;}
+
+   try {
+      // if token add to headers
+      // if (token) {
+         // config.headers['x-auth-token'] = token;
+      // }
+
+      const user = await axios.get(`/api/auth/user/`, tokenConfig(getState));
+
+      dispatch({
+         type: actionTypes.USER_LOADED,
+         payload: user,
+      });
+   } catch (err) {
+      // dispatch(returnErrors(err.response.data.msg, err.response.status, err.response.data.id));
+      dispatch({ type: actionTypes.AUTH_ERROR });
+      console.log('Error dispatching LoadUser: ', err.response, err);
+   }
+};
+
+export const tokenConfig = (getState, dispatch) => {
+   const token = getState().auth.token;
+   if (!token) {
+      dispatch(returnErrors('Token not found', 401));
+      dispatch({ type: actionTypes.AUTH_ERROR });
+      return null;
+   }
+   const config = {
+      headers: {
+         'Content-Type': 'application/json',
+      },
+   };
+   if (token) config.headers['x-auth-token'] = token;
+   return config;
+};

@@ -1,5 +1,6 @@
 // Authinication middleware to viwe private contnet
 const jwt = require('jsonwebtoken');
+const uuid = require('uuid')
 
 const auth = async (req, res, next) => {
    const token = req.header('X-Auth-Token');
@@ -15,7 +16,9 @@ const auth = async (req, res, next) => {
    } catch (e) {
       res.status(401).json({
          success: false,
-         message: `Tocken Error: ${ e.message }`
+         msg: `Tocken Error: ${ e.message }`,
+         id: uuid.v4(),
+         status:401
       });
       console.error(`Tocken Error: ${e.message}`);
    }

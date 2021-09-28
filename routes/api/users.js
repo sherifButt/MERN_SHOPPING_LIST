@@ -15,7 +15,11 @@ router.get('/', async (req, res) => {
       res.status(200).json(users);
    } catch (err) {
       console.log(`Error geting data form DB`);
-      res.status(404).json({ success: false, message: `Error geting data form DB, ${err}` });
+      res.status(404).json({
+         success: false,
+         msg: `Error geting data form DB, ${err}`,
+         status: 404,
+      });
    }
 });
 
@@ -28,7 +32,11 @@ router.get('/:id', async (req, res) => {
       res.status(200).json(user);
    } catch (err) {
       console.log(`Error geting data form DB`);
-      res.status(404).json({ success: false, message: `Error geting data form DB, ${err}` });
+      res.status(404).json({
+         success: false,
+         msg: `Error geting data form DB, ${err}`,
+         status: 404,
+      });
    }
 });
 
@@ -95,7 +103,8 @@ router.post('/', async (req, res) => {
       console.log(`Error while regestring user! ${e.message}`);
       res.status(404).json({
          success: false,
-         message: `Error while regestring user! ${e.message}`,
+         msg: `Error while regestring user! ${e.message}`,
+         status: 404,
       });
    }
 });
@@ -112,18 +121,25 @@ router.delete('/:id', async (req, res) => {
          await user.remove();
          res.status(200).json({
             success: true,
-            message: `Post #[${req.params.id}] deleted successfully`,
+            msg: `Post #[${ req.params.id }] deleted successfully`,
+            status:200
          });
       } else {
          res.status(404).json({
             success: false,
-            message: `user #[${req.params.id}] dosnot exist, nothing to delete`,
+            msg: `user #[${req.params.id}] dosnot exist, nothing to delete`,
+            status: 404,
          });
       }
 
       // const savedUser = await newUser.save()
    } catch (err) {
       console.log(`Error geting data form DB`);
+      res.status(404).json({
+         success: false,
+         msg: `user #[${req.params.id}] dosnot exist, nothing to delete`,
+         status: 404,
+      });
    }
 });
 

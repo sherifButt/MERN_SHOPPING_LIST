@@ -49,13 +49,14 @@ route.post('/', async (req, res) => {
          success: true,
          token,
          user: { id: user.id, name: user.name, email: user.email },
-         message: `User [${user.email}] has logged in succefuly.`,
+         msg: `User [${user.email}] has logged in succefuly.`,
       });
    } catch (e) {
       console.log(`Error while Authenticating user! ${e.message}`);
       res.status(400).json({
          success: false,
-         message: `Error while Authenticating user! ${e.message}`,
+         msg: `Error while Authenticating user! ${ e.message }`,
+         status: 400
       });
    }
 });
@@ -81,7 +82,8 @@ route.get('/user', auth, async (req, res) => {
       console.log(`Error while Authenticating user! ${e.message}`);
       res.status(400).json({
          success: false,
-         message: `Error while Authenticating user! ${e.message}`,
+         msg: `Error while Authenticating user! ${ e.message }`,
+         status: 400
       });
    }
 });

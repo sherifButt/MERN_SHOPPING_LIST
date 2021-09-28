@@ -12,20 +12,19 @@ import { deleteItem, getItems } from '../redux/actions/itemActions';
 
 const ShoppingList = () => {
    const items = useSelector(state => state.item.items);
+   const error = useSelector(state => state.error);
+
    const dispatch = useDispatch();
 
-   
-
-   useEffect( () => {
-        (async () =>  await dispatch(getItems()))()
+   useEffect(() => {
+      (async () => await dispatch(getItems()))();
    }, []);
 
    return (
       <DragDropContext
          onDragEnd={param => {
             const srcI = param.source.index;
-            const desI = param.destination?param.destination.index:null;
-            
+            const desI = param.destination ? param.destination.index : null;
          }}>
          <Container>
             <ItemModal buttonLabel="Add Item" />
