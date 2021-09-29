@@ -1,44 +1,78 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addItem } from '../redux/actions/itemActions';
-import InputField from './form/InputField';
-import { Button, Modal, ModalHeader, ModalBody, Form } from 'reactstrap';
-const ItemModal = ({ buttonLabel, className }) => {
+import { useDispatch,useSelector } from 'react-redux';
+
+// COMPONNENTS
+import InputField from '../form/InputField';
+
+import { Button, Modal, ModalHeader, ModalBody, Form, NavLink } from 'reactstrap';
+
+
+const RegisterModal = ({ buttonLabel, className }) => {
    // redux
    const dispatch = useDispatch();
+   const authenticated = useSelector(state => state.auth)
+   const error = useSelector(state => state.error)
+
    // Modal controll
    const [modal, setModal] = useState(false);
    const [inputName, setInputName] = useState('');
+   const [inputEmail, setInputEmail] = useState('');
+   const [inputPassword, setInputPassword] = useState('');
+   const [message, setMessage] = useState('');
 
    const toggle = () => setModal(!modal);
 
    const handleSubmit = e => {
       e.preventDefault();
-      inputName && dispatch(addItem({ name: inputName }));
+
       toggle();
       setInputName('');
+      setInputEmail('');
+      setInputPassword('');
    };
 
    return (
       <div>
-         <Button color="dark" onClick={toggle} style={{ marginBottom: '2rem' }}>
+         <NavLink color="danger" onClick={toggle} style={{ marginBottom: '2rem' }}>
             {buttonLabel}
-         </Button>
+         </NavLink>
          <Modal isOpen={modal} toggle={toggle} className={className}>
-            <ModalHeader toggle={toggle}>ADD ITEM</ModalHeader>
+            <ModalHeader toggle={toggle}>Register User</ModalHeader>
             <ModalBody>
                <Form
                   onSubmit={e => {
                      e.preventDefault();
                   }}>
                   <InputField
-                     id="item"
+                     id="name"
                      input={inputName}
                      setInput={setInputName}
-                     labelName="name"
+                     labelName="Name"
+                     placeholder="John Doh"
                   />
-                  <Button color="dark" style={{ marginTop: '2rem' }} onClick={handleSubmit} block>
-                     Add Item
+                  <InputField
+                     id="item"
+                     input={inputEmail}
+                     setInput={setInputEmail}
+                     labelName="Email"
+                     placeholder="email@address.com"
+                     type="email"
+                  />
+                  <InputField
+                     id="item"
+                     input={inputPassword}
+                     setInput={setInputPassword}
+                     labelName="Password"
+                     placeholder="*****"
+                     type="password"
+                  />
+                  <Button
+                     type="submit"
+                     color="dark"
+                     style={{ marginTop: '2rem' }}
+                     onClick={handleSubmit}
+                     block>
+                     Register
                   </Button>
                </Form>
             </ModalBody>
@@ -47,4 +81,4 @@ const ItemModal = ({ buttonLabel, className }) => {
    );
 };
 
-export default ItemModal;
+export default RegisterModal;

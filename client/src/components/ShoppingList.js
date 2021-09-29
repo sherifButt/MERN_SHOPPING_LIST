@@ -45,12 +45,12 @@ const ShoppingList = () => {
                                              boxShadow: snapshot.isDragging
                                                 ? '0 0 .9rem #66666640'
                                                 : 'none',
-                                             borderRadius: snapshot.isDragging ? '5px' : 'none',
+                                             // borderRadius: snapshot.isDragging ? '5px' : 'none',
                                           }}>
                                           <ListGroupItem
                                              {...provided.dragHandleProps}
-                                             className="mb-2">
-                                             <span color="light"> =</span>
+                                             className="mb-2 text-dark fw-light">
+                                             <span color="gray"> = </span>
                                              <Button
                                                 className="remove-btn ml-3"
                                                 color="danger"

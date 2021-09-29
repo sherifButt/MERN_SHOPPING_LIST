@@ -9,6 +9,10 @@ import {
    NavLink,
    Container,
 } from "reactstrap";
+
+// COMPONENTS
+import RegisterModal from './auth/RegisterModal';
+
 const AppNavbar = () => {
    const [isOpen, setIsOpen] = useState(false);
 
@@ -26,6 +30,10 @@ const AppNavbar = () => {
                         Github
                      </NavLink>
                   </NavItem>
+                  <NavItem>
+                     <RegisterModal buttonLabel="Regester user" />
+                  </NavItem>
+                  
                </Nav>
             </Collapse>
          </Container>

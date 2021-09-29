@@ -16,3 +16,12 @@ opacity: 1;
 opacity: 0.01;
 transition: opacity 1000ms ease-in;
 }
+
+.navbar-collapse.show {
+   border-radius: 0 0 .25rem .25rem;
+   animation: show-navbar-collapse .2s ease forwards;
+}
+
+.navbar-collapse {
+   top: 61px;
+}
