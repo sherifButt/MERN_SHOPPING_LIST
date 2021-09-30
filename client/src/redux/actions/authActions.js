@@ -23,7 +23,7 @@ export const loadUser = () => async (dispatch, getState) => {
    try {
       // if token add to headers
       // if (token) {
-         // config.headers['x-auth-token'] = token;
+      // config.headers['x-auth-token'] = token;
       // }
 
       const user = await axios.get(`/api/auth/user/`, tokenConfig(getState));
@@ -36,6 +36,28 @@ export const loadUser = () => async (dispatch, getState) => {
       // dispatch(returnErrors(err.response.data.msg, err.response.status, err.response.data.id));
       dispatch({ type: actionTypes.AUTH_ERROR });
       console.log('Error dispatching LoadUser: ', err.response, err);
+   }
+};
+
+// Register User
+export const registerUser = user => async dispatch => {
+   // headers
+   // const config = {
+   //    headers: {
+   //       "Content-type": "application/json"
+   //    }
+   // }
+   try {
+      const response = await axios.post(`/api/users/`, user);
+      const token = response.data.token;
+      const regesterdUser = response.data.user;
+
+      if (token) dispatch({ type: actionTypes.REGEITER_SUCCESS, payload: { token, user: regesterdUser } });
+   
+   } catch (err) {
+      console.log('Error dispatching RegisterUser: ', err.response);
+      dispatch(returnErrors(err.response.data.msg, err.response.data.status));
+      dispatch({ type: actionTypes.AUTH_ERROR });
    }
 };
 

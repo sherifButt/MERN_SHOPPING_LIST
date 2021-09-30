@@ -26,9 +26,9 @@ const AppNavbar = () => {
             <Collapse isOpen={isOpen} navbar>
                <Nav className="ml-auto" navbar>
                   <NavItem>
-                     <NavLink href="https://github.com/sherifButt/MERN_SHOPPING_LIST">
+                     {/* <NavLink href="https://github.com/sherifButt/MERN_SHOPPING_LIST">
                         Github
-                     </NavLink>
+                     </NavLink> */}
                   </NavItem>
                   <NavItem>
                      <RegisterModal buttonLabel="Regester user" />

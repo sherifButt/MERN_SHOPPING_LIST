@@ -1,6 +1,18 @@
-import { Input, Label, FormGroup } from "reactstrap";
+import { Input, Label, FormGroup, FormFeedback } from 'reactstrap';
 
-const InputField = ({ placeholder, labelName, input, setInput, id, type, autoFocus }) => {
+const InputField = ({
+   placeholder,
+   labelName,
+   input,
+   setInput,
+   id,
+   type,
+   autoFocus,
+   valid,
+   invalid,
+   validMessage,
+   invalidMessage
+}) => {
    return (
       <FormGroup>
          <Label for={id && id}>{labelName}</Label>
@@ -9,11 +21,18 @@ const InputField = ({ placeholder, labelName, input, setInput, id, type, autoFoc
             type={type && type}
             placeholder={placeholder}
             autoFocus="autofocus"
-            autofocus
+            valid={valid}
+            invalid={invalid}
             onChange={e => {
                setInput && setInput(e.target.value);
             }}
             value={input && input}></Input>
+         <FormFeedback valid={valid && valid}>
+            {validMessage && validMessage}
+         </FormFeedback>
+         <FormFeedback invalid={valid && valid}>
+            {invalidMessage && invalidMessage}
+         </FormFeedback>
       </FormGroup>
    );
 };
