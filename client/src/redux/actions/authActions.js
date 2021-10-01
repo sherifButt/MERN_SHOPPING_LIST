@@ -40,7 +40,7 @@ export const loadUser = () => async (dispatch, getState) => {
 };
 
 // Register User
-export const registerUser = user => async dispatch => {
+export const register = user => async dispatch => {
    // headers
    // const config = {
    //    headers: {
@@ -52,19 +52,19 @@ export const registerUser = user => async dispatch => {
       const token = response.data.token;
       const regesterdUser = response.data.user;
 
-      if (token) dispatch({ type: actionTypes.REGEITER_SUCCESS, payload: { token, user: regesterdUser } });
-   
+      if (token)
+         dispatch({ type: actionTypes.REGEITER_SUCCESS, payload: { token, user: regesterdUser } });
    } catch (err) {
       console.log('Error dispatching RegisterUser: ', err.response);
-      dispatch(returnErrors(err.response.data.msg, err.response.data.status));
-      dispatch({ type: actionTypes.AUTH_ERROR });
+      dispatch(returnErrors(err.response.data.msg, err.response.data.status,'REGISTER_FAIL'));
+      dispatch({ type: actionTypes.REGISTER_FAIL });
    }
 };
 
 export const tokenConfig = (getState, dispatch) => {
    const token = getState().auth.token;
    if (!token) {
-      dispatch(returnErrors('Token not found', 401));
+      dispatch(returnErrors('Token not found', 401, 'AUTH_ERROR'));
       dispatch({ type: actionTypes.AUTH_ERROR });
       return null;
    }

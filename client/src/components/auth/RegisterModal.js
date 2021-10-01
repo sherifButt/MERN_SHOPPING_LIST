@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../../redux/actions/authActions';
+import { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector, connect } from 'react-redux';
+import { register } from '../../redux/actions/authActions';
+import { clearErrors } from '../../redux/actions/errorActions';
 
 // COMPONNENTS
 import InputField from '../form/InputField';
@@ -20,74 +21,101 @@ import {
    FormText,
 } from 'reactstrap';
 
-const RegisterModal = ({ buttonLabel, className }) => {
+const RegisterModal = ({
+   buttonLabel,
+   className,
+   isAuthenticated,
+   error,
+   register,
+   clearErrors,
+}) => {
    // redux
-   const dispatch = useDispatch();
-   const authenticated = useSelector(state => state.auth);
-   const error = useSelector(state => state.error);
+   // const dispatch = useDispatch();
+   // redux STATE
+   // const authenticated = useSelector(state => state.auth);
+   // const error = useSelector(state => state.error);
 
+   // STATE
    // Modal controll
    const [modal, setModal] = useState(false);
-   const [alertIsVisible, setAlertIsVisible] = useState(false);
-   const [inputName, setInputName] = useState('');
-   const [inputEmail, setInputEmail] = useState('');
-   const [inputPassword, setInputPassword] = useState('');
-   const [message, setMessage] = useState(error.msg);
+   const [name, setName] = useState('');
+   const [email, setEmail] = useState('');
+   const [password, setPassword] = useState('');
+   const [msg, setMsg] = useState(error.msg);
 
-   const toggle = () => setModal(!modal);
-   const alertToggle = () => setAlertIsVisible(!alertIsVisible);
+   const handleToggle = useCallback(() => {
+      setModal(!modal)
+      clearErrors()
+   });
+  
 
    const handleSubmit = e => {
       e.preventDefault();
-      dispatch(
-         registerUser({ name: inputName, email: inputEmail, password: inputPassword, msg: message })
-      );
-      if (!authenticated.isAuthenticated) {
-         setAlertIsVisible(true);
+      const user = {
+         name,
+         email,
+         password,
+         msg,
+      };
+
+      // attempt to rgister
+      register(user);
+      if (!isAuthenticated) {
+         //setAlert(true);
       } else {
+         handleToggle();
          
-         toggle();
-         setAlertIsVisible(false);
-         setInputName('');
-         setInputEmail('');
-         setInputPassword('');
+         setName('');
+         setEmail('');
+         setPassword('');
       }
    };
 
+   useEffect(() => {
+      // check for register errors
+      if (error.id == 'REGISTER_FAIL') setMsg(error.msg)
+      else setMsg(null);
+      // clearErrors();
+      // If authintecated, close modal
+      if (modal) if (isAuthenticated) handleToggle();
+   }, [error, handleToggle,isAuthenticated,modal]);
+
    return (
       <div>
-         <NavLink color="danger" onClick={toggle} style={{ marginBottom: '2rem' }}>
+         <NavLink color="danger" onClick={handleToggle} style={{ marginBottom: '2rem' }}>
             {buttonLabel}
          </NavLink>
-         <Modal isOpen={modal} toggle={toggle} className={className}>
-            <ModalHeader toggle={toggle}>Register User</ModalHeader>
+         <Modal isOpen={modal} toggle={handleToggle} className={className}>
+            <ModalHeader toggle={handleToggle}>Register User</ModalHeader>
             <ModalBody>
-               <Alert color="info" isOpen={alertIsVisible} toggle={alertToggle}>
-                  {error && error.msg}
-               </Alert>
+               {error.msg ?
+                  <Alert color="danger">
+               {error.msg}
+                  </Alert>
+                  : null}
                <Form
                   onSubmit={e => {
                      e.preventDefault();
                   }}>
                   <InputField
                      id="name"
-                     input={inputName}
-                     setInput={setInputName}
+                     input={name}
+                     setInput={setName}
                      labelName="Name"
                      placeholder="John Doh"
                   />
                   <InputField
-                     id="item"
-                     input={inputEmail}
-                     setInput={setInputEmail}
+                     id="email"
+                     input={email}
+                     setInput={setEmail}
                      labelName="Email"
                      placeholder="email@address.com"
                      type="email"
                   />
                   <InputField
-                     id="item"
-                     input={inputPassword}
-                     setInput={setInputPassword}
+                     id="password"
+                     input={password}
+                     setInput={setPassword}
                      labelName="Password"
                      placeholder="*****"
                      type="password"
@@ -107,4 +135,9 @@ const RegisterModal = ({ buttonLabel, className }) => {
    );
 };
 
-export default RegisterModal;
+const mapStateToPropos = state => ({
+   error: state.error,
+   isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToPropos, { register, clearErrors })(RegisterModal);
