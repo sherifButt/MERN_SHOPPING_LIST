@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { connect } from 'react-redux';
 import {
    Collapse,
    Navbar,
@@ -8,15 +9,28 @@ import {
    NavItem,
    NavLink,
    Container,
-} from "reactstrap";
+} from 'reactstrap';
 
 // COMPONENTS
 import RegisterModal from './auth/RegisterModal';
+import Logout from './auth/Logout';
+import Login from './auth/Login';
 
-const AppNavbar = () => {
+const AppNavbar = ({ isAuthenticated,user }) => {
    const [isOpen, setIsOpen] = useState(false);
 
    const toggle = () => setIsOpen(!isOpen);
+
+   const registerUser = (
+      <NavItem>
+         <RegisterModal buttonLabel="Regester user" />
+      </NavItem>
+   );
+   const logIn = (
+      <NavItem>
+         <Login buttonLabel="Login" />
+      </NavItem>
+   );
 
    return (
       <Navbar color="dark" dark expand="sm" className="mb-5">
@@ -25,15 +39,25 @@ const AppNavbar = () => {
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
                <Nav className="ml-auto" navbar>
-                  <NavItem>
-                     {/* <NavLink href="https://github.com/sherifButt/MERN_SHOPPING_LIST">
-                        Github
-                     </NavLink> */}
-                  </NavItem>
-                  <NavItem>
-                     <RegisterModal buttonLabel="Regester user" />
-                  </NavItem>
-                  
+                  {isAuthenticated ? (
+                    <>
+                        <NavItem>
+                           <NavLink><strong>Welcome, {user.name&&user.name}</strong></NavLink>  
+                        </NavItem>
+                        <NavItem>
+                           <Logout />
+                        </NavItem>
+                    </>
+                  ) : (
+                     <>
+                        <NavItem>
+                           <RegisterModal buttonLabel="Regester user" />
+                        </NavItem>
+                        <NavItem>
+                           <Login buttonLabel="Login" />
+                        </NavItem>
+                     </>
+                  )}
                </Nav>
             </Collapse>
          </Container>
@@ -41,4 +65,8 @@ const AppNavbar = () => {
    );
 };
 
-export default AppNavbar;
+const mapStateToPropos = state => ({
+   isAuthenticated: state.auth.isAuthenticated,
+   user: state.auth.user
+});
+export default connect(mapStateToPropos, {})(AppNavbar);

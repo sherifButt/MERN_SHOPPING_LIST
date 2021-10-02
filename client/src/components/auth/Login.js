@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector, connect } from 'react-redux';
-import { register } from '../../redux/actions/authActions';
+import { login } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
 
 // COMPONNENTS
@@ -21,63 +21,57 @@ import {
    FormText,
 } from 'reactstrap';
 
-const RegisterModal = ({
+const Login = ({
    buttonLabel,
    className,
    isAuthenticated,
    error,
-   register,
+   login,
    clearErrors,
 }) => {
-   // redux
-   // const dispatch = useDispatch();
-   // redux STATE
-   // const authenticated = useSelector(state => state.auth);
-   // const error = useSelector(state => state.error);
-
+   
    // STATE
    // Modal controll
    const [modal, setModal] = useState(false);
-   const [name, setName] = useState('');
+   // const [name, setName] = useState('');
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
    const [msg, setMsg] = useState(error.msg);
 
    const handleToggle = useCallback(() => {
-      setModal(!modal)
-      clearErrors()
-   },[modal]);
-  
+      setModal(!modal);
+      clearErrors();
+   }, [modal]);
 
    const handleSubmit = e => {
       e.preventDefault();
       const user = {
-         name,
+         // name,
          email,
          password,
          msg,
       };
 
       // attempt to rgister
-      register(user);
+      login(user);
       if (!isAuthenticated) {
          //setAlert(true);
       } else {
          handleToggle();
-         setName('');
+         // setName('');
          setEmail('');
          setPassword('');
       }
    };
 
    useEffect(() => {
-      // check for register errors
-      if (error.id == 'REGISTER_FAIL') setMsg(error.msg)
+      // check for login errors
+      if (error.id == 'REGISTER_FAIL') setMsg(error.msg);
       else setMsg(null);
       // clearErrors();
       // If authintecated, close modal
       if (modal) if (isAuthenticated) handleToggle();
-   }, [error, handleToggle,isAuthenticated,modal]);
+   }, [error, handleToggle, isAuthenticated, modal]);
 
    return (
       <div>
@@ -85,22 +79,20 @@ const RegisterModal = ({
             {buttonLabel}
          </NavLink>
          <Modal isOpen={modal} toggle={handleToggle} className={className}>
-            <ModalHeader toggle={handleToggle}>
-               Register User
-            </ModalHeader>
+            <ModalHeader toggle={handleToggle}>Login</ModalHeader>
             <ModalBody>
                {error.msg ? <Alert color="danger"> {error.msg} </Alert> : null}
                <Form
                   onSubmit={e => {
                      e.preventDefault();
                   }}>
-                  <InputField
+                  {/* <InputField
                      id="name"
                      input={name}
                      setInput={setName}
                      labelName="Name"
                      placeholder="John Doh"
-                  />
+                  /> */}
                   <InputField
                      id="email"
                      input={email}
@@ -123,7 +115,7 @@ const RegisterModal = ({
                      style={{ marginTop: '2rem' }}
                      onClick={handleSubmit}
                      block>
-                     Register
+                     Login
                   </Button>
                </Form>
             </ModalBody>
@@ -137,4 +129,4 @@ const mapStateToPropos = state => ({
    isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToPropos, { register, clearErrors })(RegisterModal);
+export default connect(mapStateToPropos, { login, clearErrors })(Login);

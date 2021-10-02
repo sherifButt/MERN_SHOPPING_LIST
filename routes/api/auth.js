@@ -23,9 +23,10 @@ route.post('/', async (req, res) => {
    if (!email || !password)
       return res.status(404).json({
          success: false,
-         message: `Required fields are missing,${!email ? ' #email' : ''}${
+         msg: `Required fields are missing,${!email ? ' #email' : ''}${
             !password ? ' #password' : ''
-         } field is missing.`,
+            } field is missing.`,
+         status: 401,
       });
 
    try {
@@ -47,6 +48,7 @@ route.post('/', async (req, res) => {
 
       res.status(200).json({
          success: true,
+         status:200,
          token,
          user: { id: user.id, name: user.name, email: user.email },
          msg: `User [${user.email}] has logged in succefuly.`,

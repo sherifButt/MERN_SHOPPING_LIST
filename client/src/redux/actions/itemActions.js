@@ -1,6 +1,7 @@
 import axios from 'axios';
 import actionTypes from '../constants/actionTypes';
-// import { getError, clearError } from './errorActions';
+import { returnErrors, clearError } from './errorActions';
+import {tokenConfig} from './authActions'
 
 export const getItems = () => async dispatch => {
    dispatch(setItemsLoading());
@@ -19,10 +20,9 @@ export const getItems = () => async dispatch => {
    }
 };
 
-export const addItem = name => async dispatch => {
+export const addItem = name => async (dispatch,getState) => {
    try {
-      const res = await axios.post('/api/items', name);
-
+      const res = await axios.post('/api/items', name, tokenConfig(getState,dispatch));
       dispatch({
          type: actionTypes.ADD_ITEM,
          payload: res.data,
@@ -33,12 +33,14 @@ export const addItem = name => async dispatch => {
          payload: err.response.data,
       });
       console.log('Error dispatching ADD_ITEM : ', err.response.data.message, err);
+      dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'ADD_ITEM_ERROR'));
    }
 };
 
-export const deleteItem = _id => async dispatch => {
+export const deleteItem = _id => async (dispatch,getState) => {
    try {
-      await axios.delete('/api/items/' + _id);
+
+      await axios.delete('/api/items/' + _id, tokenConfig(getState, dispatch));
       dispatch({
          type: actionTypes.DELETE_ITEM,
          payload: _id,

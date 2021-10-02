@@ -56,13 +56,39 @@ export const register = user => async dispatch => {
          dispatch({ type: actionTypes.REGEITER_SUCCESS, payload: { token, user: regesterdUser } });
    } catch (err) {
       console.log('Error dispatching RegisterUser: ', err.response);
-      dispatch(returnErrors(err.response.data.msg, err.response.data.status,'REGISTER_FAIL'));
+      dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'REGISTER_FAIL'));
       dispatch({ type: actionTypes.REGISTER_FAIL });
+   }
+};
+
+// log user out
+export const logout = () => {
+   return {
+      type: actionTypes.LOGOUT_SUCCESS,
+   };
+};
+
+// login
+export const login = user => async dispatch => {
+   // check if user exists
+   try {
+      const response = await axios.post('/api/auth ', user);
+
+      const token = response.data.token;
+      if (!token) throw Error(`No token found for ${user.email}`);
+
+      const existingUser = response.data.user;
+
+      dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: { user: existingUser, token: token } });
+   } catch (err) {
+      console.log('Error dispatching login' + err.response.data.msg, err.response.data.status);
+      dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'LOGIN_FAIL'));
    }
 };
 
 export const tokenConfig = (getState, dispatch) => {
    const token = getState().auth.token;
+   console.log('--->', token);
    if (!token) {
       dispatch(returnErrors('Token not found', 401, 'AUTH_ERROR'));
       dispatch({ type: actionTypes.AUTH_ERROR });
