@@ -26,7 +26,8 @@ export const loadUser = () => async (dispatch, getState) => {
       // config.headers['x-auth-token'] = token;
       // }
 
-      const user = await axios.get(`/api/auth/user/`, tokenConfig(getState));
+      const response = await axios.get(`/api/auth/user/`, tokenConfig(getState));
+      const user = response.data.user
 
       dispatch({
          type: actionTypes.USER_LOADED,

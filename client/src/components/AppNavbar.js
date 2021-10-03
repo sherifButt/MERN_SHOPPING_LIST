@@ -16,7 +16,7 @@ import RegisterModal from './auth/RegisterModal';
 import Logout from './auth/Logout';
 import Login from './auth/Login';
 
-const AppNavbar = ({ isAuthenticated,user }) => {
+const AppNavbar = ({ isAuthenticated, user }) => {
    const [isOpen, setIsOpen] = useState(false);
 
    const toggle = () => setIsOpen(!isOpen);
@@ -40,14 +40,16 @@ const AppNavbar = ({ isAuthenticated,user }) => {
             <Collapse isOpen={isOpen} navbar>
                <Nav className="ml-auto" navbar>
                   {isAuthenticated ? (
-                    <>
+                     <>
                         <NavItem>
-                           <NavLink><strong>Welcome, {user.name&&user.name}</strong></NavLink>  
+                           <NavLink>
+                              <strong>Welcome, {user.name && user.name}</strong>
+                           </NavLink>
                         </NavItem>
                         <NavItem>
                            <Logout />
                         </NavItem>
-                    </>
+                     </>
                   ) : (
                      <>
                         <NavItem>
@@ -67,6 +69,6 @@ const AppNavbar = ({ isAuthenticated,user }) => {
 
 const mapStateToPropos = state => ({
    isAuthenticated: state.auth.isAuthenticated,
-   user: state.auth.user
+   user: state.auth.user,
 });
 export default connect(mapStateToPropos, {})(AppNavbar);
