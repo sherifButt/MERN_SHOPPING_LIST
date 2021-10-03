@@ -1,25 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Alert, Button, Form, Modal, ModalBody, ModalHeader, NavLink } from 'reactstrap';
 import { register } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
-
 // COMPONNENTS
 import InputField from '../form/InputField';
-
-import {
-   Alert,
-   Input,
-   Label,
-   FormGroup,
-   FormFeedback,
-   Button,
-   Modal,
-   ModalHeader,
-   ModalBody,
-   Form,
-   NavLink,
-   FormText,
-} from 'reactstrap';
 
 const RegisterModal = ({
    buttonLabel,
@@ -44,10 +29,9 @@ const RegisterModal = ({
    const [msg, setMsg] = useState(error.msg);
 
    const handleToggle = useCallback(() => {
-      setModal(!modal)
-      clearErrors()
-   },[modal]);
-  
+      setModal(!modal);
+      clearErrors();
+   }, [modal]);
 
    const handleSubmit = e => {
       e.preventDefault();
@@ -72,12 +56,12 @@ const RegisterModal = ({
 
    useEffect(() => {
       // check for register errors
-      if (error.id == 'REGISTER_FAIL') setMsg(error.msg)
+      if (error.id == 'REGISTER_FAIL') setMsg(error.msg);
       else setMsg(null);
       // clearErrors();
       // If authintecated, close modal
       if (modal) if (isAuthenticated) handleToggle();
-   }, [error, handleToggle,isAuthenticated,modal]);
+   }, [error, handleToggle, isAuthenticated, modal]);
 
    return (
       <div>
@@ -85,9 +69,7 @@ const RegisterModal = ({
             {buttonLabel}
          </NavLink>
          <Modal isOpen={modal} toggle={handleToggle} className={className}>
-            <ModalHeader toggle={handleToggle}>
-               Register User
-            </ModalHeader>
+            <ModalHeader toggle={handleToggle}>Register User</ModalHeader>
             <ModalBody>
                {error.msg ? <Alert color="danger"> {error.msg} </Alert> : null}
                <Form

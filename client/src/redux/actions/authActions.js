@@ -26,15 +26,16 @@ export const loadUser = () => async (dispatch, getState) => {
       // config.headers['x-auth-token'] = token;
       // }
 
-      const response = await axios.get(`/api/auth/user/`, tokenConfig(getState));
-      const user = response.data.user
+      const response = await axios.get(`/api/auth/user/`, tokenConfig(getState, dispatch));
+      
+      const user = response.data.user;
 
       dispatch({
          type: actionTypes.USER_LOADED,
          payload: user,
       });
    } catch (err) {
-      // dispatch(returnErrors(err.response.data.msg, err.response.status, err.response.data.id));
+      dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'LOGIN_FAIL'));
       dispatch({ type: actionTypes.AUTH_ERROR });
       console.log('Error dispatching LoadUser: ', err.response, err);
    }
@@ -89,7 +90,7 @@ export const login = user => async dispatch => {
 
 export const tokenConfig = (getState, dispatch) => {
    const token = getState().auth.token;
-   console.log('--->', token);
+
    if (!token) {
       dispatch(returnErrors('Token not found', 401, 'AUTH_ERROR'));
       dispatch({ type: actionTypes.AUTH_ERROR });
