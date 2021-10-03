@@ -9,11 +9,6 @@ import { deleteItem, getItems } from '../redux/actions/itemActions';
 import ItemModal from './ItemModal';
 
 const ShoppingList = ({ getItems, deleteItem, items, error }) => {
-   // const items = useSelector(state => state.item.items);
-   // const error = useSelector(state => state.error);
-
-   // const dispatch = useDispatch();
-
    useEffect(() => {
       (async () => await getItems())();
    }, []);

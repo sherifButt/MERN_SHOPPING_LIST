@@ -37,7 +37,7 @@ export const loadUser = () => async (dispatch, getState) => {
    } catch (err) {
       dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'LOGIN_FAIL'));
       dispatch({ type: actionTypes.AUTH_ERROR });
-      console.log('Error dispatching LoadUser: ', err.response, err);
+      if(!process.env.NODE_ENV === 'production') console.log('Error dispatching LoadUser: ', err.response, err);
    }
 };
 
@@ -75,15 +75,16 @@ export const login = user => async dispatch => {
    // check if user exists
    try {
       const response = await axios.post('/api/auth ', user);
-
+console.log(user)
       const token = response.data.token;
+      console.log(token)
       if (!token) throw Error(`No token found for ${user.email}`);
 
       const existingUser = response.data.user;
 
       dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: { user: existingUser, token: token } });
    } catch (err) {
-      console.log('Error dispatching login' + err.response.data.msg, err.response.data.status);
+      console.log('Error dispatching login: ' + err.response.data.msg, err.response.data.status);
       dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'LOGIN_FAIL'));
    }
 };
