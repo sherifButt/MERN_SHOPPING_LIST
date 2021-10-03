@@ -1,23 +1,21 @@
 import { useEffect } from 'react';
-import { Button, Container, ListGroup, ListGroupItem } from 'reactstrap';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+// REDUX
+import { connect } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
+import { Button, Container, ListGroup, ListGroupItem } from 'reactstrap';
+import { deleteItem, getItems } from '../redux/actions/itemActions';
 // COMPONNETNT
 import ItemModal from './ItemModal';
 
-// REDUX
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteItem, getItems } from '../redux/actions/itemActions';
+const ShoppingList = ({ getItems, deleteItem, items, error }) => {
+   // const items = useSelector(state => state.item.items);
+   // const error = useSelector(state => state.error);
 
-const ShoppingList = () => {
-   const items = useSelector(state => state.item.items);
-   const error = useSelector(state => state.error);
-
-   const dispatch = useDispatch();
+   // const dispatch = useDispatch();
 
    useEffect(() => {
-      (async () => await dispatch(getItems()))();
+      (async () => await getItems())();
    }, []);
 
    return (
@@ -56,7 +54,7 @@ const ShoppingList = () => {
                                                 color="danger"
                                                 size="sm"
                                                 onClick={() => {
-                                                   dispatch(deleteItem(_id));
+                                                   deleteItem(_id);
                                                 }}>
                                                 &times;
                                              </Button>
@@ -78,4 +76,8 @@ const ShoppingList = () => {
    );
 };
 
-export default ShoppingList;
+const mapStateToProps = state => ({
+   items: state.item.items,
+   error: state.error,
+});
+export default connect(mapStateToProps, { getItems, deleteItem })(ShoppingList);

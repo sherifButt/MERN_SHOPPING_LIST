@@ -1,8 +1,8 @@
-import { useState,useEffect,useRef } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Button, Form, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { addItem } from '../redux/actions/itemActions';
 import InputField from './form/InputField';
-import { Button, Modal, ModalHeader, ModalBody, Form } from 'reactstrap';
 
 const ItemModal = ({ buttonLabel, className }) => {
    // redux
@@ -10,11 +10,6 @@ const ItemModal = ({ buttonLabel, className }) => {
    // Modal controll
    const [modal, setModal] = useState(false);
    const [inputName, setInputName] = useState();
-   const inputElement = useRef('');
-   
-   useEffect(() => {
-      if(inputElement.current) inputElement.current.focus()
-   },[])
 
    const toggle = () => setModal(!modal);
 
@@ -38,9 +33,7 @@ const ItemModal = ({ buttonLabel, className }) => {
                      e.preventDefault();
                   }}>
                   <InputField
-                     ref={inputElement}
                      id="item"
-                     
                      input={inputName}
                      setInput={setInputName}
                      labelName="name"

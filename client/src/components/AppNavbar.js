@@ -2,40 +2,27 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import {
    Collapse,
-   Navbar,
-   NavbarToggler,
-   NavbarBrand,
+   Container,
    Nav,
+   Navbar,
+   NavbarBrand,
+   NavbarToggler,
    NavItem,
    NavLink,
-   Container,
 } from 'reactstrap';
-
+import Login from './auth/Login';
+import Logout from './auth/Logout';
 // COMPONENTS
 import RegisterModal from './auth/RegisterModal';
-import Logout from './auth/Logout';
-import Login from './auth/Login';
 
 const AppNavbar = ({ isAuthenticated, user }) => {
    const [isOpen, setIsOpen] = useState(false);
 
    const toggle = () => setIsOpen(!isOpen);
 
-   const registerUser = (
-      <NavItem>
-         <RegisterModal buttonLabel="Regester user" />
-      </NavItem>
-   );
-   const logIn = (
-      <NavItem>
-         <Login buttonLabel="Login" />
-      </NavItem>
-   );
-   
    return (
       <Navbar color="dark" dark expand="sm" className="mb-5">
          <Container>
-            
             <NavbarBrand href="/">Shopping List</NavbarBrand>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
