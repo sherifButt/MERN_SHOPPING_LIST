@@ -11,7 +11,7 @@ const User = require('../../models/User');
 // @access Public
 router.get('/', async (req, res) => {
    try {
-      const users = await User.find().sort({ date: -1 });
+      const users = await User.find().sort({ date: -1 }).select('-password');
       res.status(200).json(users);
    } catch (err) {
       console.log(`Error geting data form DB`);
@@ -133,7 +133,7 @@ router.delete('/:id', async (req, res) => {
       }
 
       // const savedUser = await newUser.save()
-   } catch (err) {
+   } catch (e) {
       console.log(`Error geting data form DB`);
       res.status(404).json({
          success: false,

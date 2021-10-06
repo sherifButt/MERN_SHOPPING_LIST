@@ -4,7 +4,7 @@ const initialState = {
    token: localStorage.getItem('token'),
    isAuthenticated: null,
    isLoading: false,
-   user: null,
+   user: {id:null},
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -38,7 +38,7 @@ export default (state = initialState, { type, payload }) => {
          return {
             ...state,
             token: null,
-            user: null,
+            user: { id: null },
             isAuthenticated: false,
             isLoading: false,
          };

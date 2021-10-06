@@ -12,6 +12,7 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
    useEffect(() => {
       (async () => await getItems())();
    }, []);
+   // const categoriesList = ite
 
    return (
       <DragDropContext
@@ -53,7 +54,7 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
                                                 }}>
                                                 &times;
                                              </Button>
-                                             {name}
+                                             {name} 
                                           </ListGroupItem>
                                        </div>
                                     )}

@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import './App.css';
 import AppNavbar from './components/AppNavbar';
 import ShoppingList from './components/ShoppingList';
+import Footer from './components/Footer'
 
 import { Provider } from 'react-redux';
 import store from './redux';
@@ -22,6 +23,8 @@ function App() {
          <Provider store={store}>
             <AppNavbar />
             <ShoppingList />
+            <Footer />
+         
          </Provider>
       </div>
    );

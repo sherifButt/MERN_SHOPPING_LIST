@@ -75,9 +75,7 @@ export const login = user => async dispatch => {
    // check if user exists
    try {
       const response = await axios.post('/api/auth ', user);
-console.log(user)
       const token = response.data.token;
-      console.log(token)
       if (!token) throw Error(`No token found for ${user.email}`);
 
       const existingUser = response.data.user;

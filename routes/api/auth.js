@@ -13,7 +13,7 @@ const route = express.Router();
 // RISK
 /**
  * @route POST api/auth
- * @desc Auth user
+ * @desc Authenticate user
  * @access Public
  */
 route.post('/', async (req, res) => {
@@ -25,7 +25,7 @@ route.post('/', async (req, res) => {
          success: false,
          msg: `Required fields are missing,${!email ? ' #email' : ''}${
             !password ? ' #password' : ''
-            } field is missing.`,
+         } field is missing.`,
          status: 401,
       });
 
@@ -48,17 +48,18 @@ route.post('/', async (req, res) => {
 
       res.status(200).json({
          success: true,
-         status:200,
+         status: 200,
          token,
-         user: { id: user.id, name: user.name, email: user.email },
+       user: { _id: user.id, name: user.name, email: user.email },
+         
          msg: `User [${user.email}] has logged in succefuly.`,
       });
    } catch (e) {
       console.log(`Error while Authenticating user! ${e.message}`);
       res.status(400).json({
          success: false,
-         msg: `Error while Authenticating user! ${ e.message }`,
-         status: 400
+         msg: `Error while Authenticating user! ${e.message}`,
+         status: 400,
       });
    }
 });
@@ -72,20 +73,20 @@ route.get('/user', auth, async (req, res) => {
    try {
       // get id from user object stored in request comming from auth middleware.
       const id = req.user.id;
-      if(!id) throw Error(`No id provided in req.user Object.`)
-      
+      if (!id) throw Error(`No id provided in req.user Object.`);
+
       // get user data from database
       const user = await User.findById(id).select('-password');
-      if (!user) throw Error('User not found')
-      
+      if (!user) throw Error('User not found');
+
       // send user object as json to client
       res.status(200).json({ user });
    } catch (e) {
       console.log(`Error while Authenticating user! ${e.message}`);
       res.status(400).json({
          success: false,
-         msg: `Error while Authenticating user! ${ e.message }`,
-         status: 400
+         msg: `Error while Authenticating user! ${e.message}`,
+         status: 400,
       });
    }
 });

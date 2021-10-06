@@ -1,7 +1,7 @@
 import axios from 'axios';
 import actionTypes from '../constants/actionTypes';
-import { returnErrors, clearError } from './errorActions';
-import {tokenConfig} from './authActions'
+import { tokenConfig } from './authActions';
+import { returnErrors } from './errorActions';
 
 export const getItems = () => async dispatch => {
    dispatch(setItemsLoading());
@@ -12,17 +12,16 @@ export const getItems = () => async dispatch => {
          payload: res.data,
       });
    } catch (err) {
-      dispatch({
-         type: actionTypes.GET_ERRORS,
-         payload: err.response.data,
-      });
+      dispatch(returnErrors(err.response.data.msg,err.response.status));
       console.log('Error dispatching GET_ITEMS: ', err.response.data.message, err);
    }
 };
 
-export const addItem = name => async (dispatch,getState) => {
+export const addItem = item => async (dispatch, getState) => {
    try {
-      const res = await axios.post('/api/items', name, tokenConfig(getState,dispatch));
+      console.log(item)
+      const res = await axios.post('/api/items', item, tokenConfig(getState, dispatch));
+      
       dispatch({
          type: actionTypes.ADD_ITEM,
          payload: res.data,
@@ -37,9 +36,8 @@ export const addItem = name => async (dispatch,getState) => {
    }
 };
 
-export const deleteItem = _id => async (dispatch,getState) => {
+export const deleteItem = _id => async (dispatch, getState) => {
    try {
-
       await axios.delete('/api/items/' + _id, tokenConfig(getState, dispatch));
       dispatch({
          type: actionTypes.DELETE_ITEM,
