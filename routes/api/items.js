@@ -10,17 +10,7 @@ const Item = require('../../models/Item');
 // @desc Get all items
 // @access Public
 router.get('/', async (req, res) => {
-   // const token = req.headers['X-Auth-Token'];
-   // let _select = '';
-
    try {
-      // try {
-      //    const validateToken = await jwt.verify(token, process.env.JWT_SECRET);
-      //    _select = '-password';
-      // } catch (e) {
-      //    _select = '-password -email -_id';
-      // }
-
       const items = await Item.find()
          .sort({ date: -1 })
          .populate({

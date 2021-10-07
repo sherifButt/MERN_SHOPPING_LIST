@@ -3,30 +3,28 @@ import { connect, useDispatch } from 'react-redux';
 import {
    Button,
    Form,
+   FormFeedback,
+   FormGroup,
+   Input,
+   Label,
    Modal,
    ModalBody,
    ModalHeader,
-   FormGroup,
-   Label,
-   Input,
-   FormFeedback,
 } from 'reactstrap';
 import { addItem } from '../redux/actions/itemActions';
-import InputField from './form/InputField';
 
 const ItemModal = ({ buttonLabel, className, user_id, addItem }) => {
-   // redux
-   const dispatch = useDispatch();
+   
    // Modal controll
    const [modal, setModal] = useState(false);
    const [name, setName] = useState();
-   const [discription, setDiscription] = useState();
+   const [description, setDescription] = useState();
    const [categories, setCategories] = useState();
    const toggle = () => setModal(!modal);
-   
+
    const item = {
       name,
-      discription,
+      description,
       category_id: ['615c28e0e0a28882f974d9c1', '615c2902e0a28882f974d9c3'],
       user_id,
    };
@@ -51,7 +49,6 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem }) => {
                      e.preventDefault();
                   }}>
                   <FormGroup>
-                     
                      <Label for="name">name</Label>
                      <Input
                         id="name"
@@ -62,13 +59,13 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem }) => {
                      <FormFeedback valid>Sweet! that name is available</FormFeedback>
                   </FormGroup>
                   <FormGroup>
-                     <label for="discription">Discription</label>
+                     <label for="description">Discription</label>
                      <Input
-                        id="discription"
+                        id="description"
                         type="textarea"
-                        name="discription"
-                        placeholder="This items discription...."
-                        onChange={e => setDiscription(e.target.value)}></Input>
+                        name="description"
+                        placeholder="This items description...."
+                        onChange={e => setDescription(e.target.value)}></Input>
                   </FormGroup>
                   <Button
                      type="submit"
@@ -85,7 +82,7 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem }) => {
    );
 };
 
-const mapPropsToState = state =>({
-user_id: state.auth.user._id,
-})
-export default connect(mapPropsToState,{addItem})(ItemModal);
+const mapPropsToState = state => ({
+   user_id: state.auth.user._id,
+});
+export default connect(mapPropsToState, { addItem })(ItemModal);

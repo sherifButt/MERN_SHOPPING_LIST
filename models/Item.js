@@ -11,8 +11,11 @@ const ItemSchema = new Schema(
       },
       description: {
          type: String,
-         default: '',
+         default: 'no description..',
       },
+      quantity: { type: Number, default: 1 },
+      price_per_Unit: { type: Number, default: 1 },
+      unit:{type:String,defualt:'pce'},
       liks: {
          type: Number,
          default: 0,
