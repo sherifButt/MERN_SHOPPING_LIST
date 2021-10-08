@@ -20,7 +20,7 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
    const button = _id => {
       return (
          <Button
-            className="remove-btn ml-3"
+            className="remove-btn ml-3 "
             color="danger"
             size="sm"
             onClick={() => {
@@ -76,14 +76,11 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
                                              {...provided.dragHandleProps}
                                              className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between"
                                              key={`items_${_id}`}>
-                                             <div className="d-flex align-items-center">
+                                             <div className="d-flex align-items-center align-middle">
                                                 <div>
-                                                   
-                                                      {dash}
-                                                   
-                                                   
-                                                      {button(_id)}
-                                                   
+                                                   {dash}
+
+                                                   {button(_id)}
                                                 </div>
 
                                                 <div className="d-flex  flex-column">

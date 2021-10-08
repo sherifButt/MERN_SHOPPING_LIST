@@ -23,7 +23,7 @@ function App() {
          <Provider store={store}>
             <AppNavbar />
             <ShoppingList />
-            <Footer />
+            {/* <Footer /> */}
          
          </Provider>
       </div>
