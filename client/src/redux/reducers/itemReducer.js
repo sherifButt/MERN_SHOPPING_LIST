@@ -3,6 +3,7 @@ import actionTypes from "../constants/actionTypes";
 const initialState = {
    items: [],
    loading: actionTypes.ITEMS_LOADING,
+   count:0
 };
 
 const itemReducer = (state = initialState, { type, payload }) => {

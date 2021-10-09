@@ -88,7 +88,7 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
                                                    <span
                                                       className="sm text-sm-left font-weight-light"
                                                       style={{ fontSize: '.7em', color: 'gray' }}>
-                                                      {description}
+                                                      {description.substring(0,21)}{description.length>21?'..':''}
                                                    </span>
                                                 </div>
                                              </div>

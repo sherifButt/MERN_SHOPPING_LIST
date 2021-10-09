@@ -36,7 +36,7 @@ router.get('/', async (req, res) => {
 });
 
 // @route POST api/item
-// @desc Create a Post object
+// @desc Create an Item object
 // @access Private
 router.post('/', auth, async (req, res) => {
    try {
@@ -46,15 +46,27 @@ router.post('/', auth, async (req, res) => {
          liks: req.body.liks,
          user_id: req.body.user_id,
          category_id: req.body.category_id,
+         quantity: req.body.quantity,
+         importance: req.body.importance,
+         pricePerUnit: req.body.pricePerUnit,
+         unit:req.body.pricePerUnit
       });
+
       const savedItem = await newItems.save();
-      res.status(200).json(savedItem);
+      if(!savedItem)  throw {
+         message: `cannot save item [${name}] `,
+         status: 401,
+         id: 'DB_ERROR',
+      };
+    const retrivedItem = await Item.findById(savedItem.id).populate({path:'user_id',select:"-password"}).populate({path:"category_id"})
+      res.status(200).json(retrivedItem);
    } catch (e) {
       console.log(`Error geting data form DB ${e}`);
-      res.status(400).json({
+      res.status(e.status ? e.status : 400).json({
          success: false,
-         msg: `Error geting data form DB! ${e}`,
-         status: 400,
+         msg: e.message,
+         status: e.status ? e.status : 400,
+         id: e.id ? e.id : null,
       });
    }
 });

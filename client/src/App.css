@@ -36,3 +36,11 @@ transition: opacity 1000ms ease-in;
 }
 
 .badge {vertical-align: super;}
+
+.dropdown-header {
+   color:#838384;
+   
+}
+.dropright .dropdown-menu{
+   left:5px !important;
+}

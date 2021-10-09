@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
       })
       //  .populate({path:'user',select:'-password'})
 
-      res.status(200).json({ success: true, category });
+      res.status(200).json( category );
    } catch (e) {
       console.log(`Error posting to /api/categories: ${e.message}`);
       res.status(e.status ? e.status : 400).json({
@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 // @desc Create a category
 // @access Private
 router.post('/', authentecation, async (req, res) => {
-   const { name, liks, discription, user_id } = req.body;
+   const { name, description, user_id } = req.body;
    try {
       // validate entries
       if (!name || !user_id)
@@ -61,7 +61,7 @@ router.post('/', authentecation, async (req, res) => {
             id: 'DB_ERROR',
          };
 
-      const newCategory = new Category({ name, liks, discription, user_id });
+      const newCategory = new Category({ name, description, user_id });
       const savedCategory = await newCategory.save();
 
       res.status(200).json({

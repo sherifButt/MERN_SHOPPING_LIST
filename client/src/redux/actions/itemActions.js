@@ -19,7 +19,7 @@ export const getItems = () => async dispatch => {
 
 export const addItem = item => async (dispatch, getState) => {
    try {
-      console.log(item)
+      
       const res = await axios.post('/api/items', item, tokenConfig(getState, dispatch));
       
       dispatch({

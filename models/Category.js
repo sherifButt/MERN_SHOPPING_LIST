@@ -2,24 +2,27 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // create schema
-const CategorySchema = new Schema({
-   
-   name: {
-      type: String,
-      required: true,
-      minlength: [2, 'Item Category Name should be more than 2 letters'],
+const CategorySchema = new Schema(
+   {
+      name: {
+         type: String,
+         required: true,
+         unique: [true, 'category name should be uniqe'],
+         minlength: [2, 'Item Category Name should be more than 2 letters'],
+      },
+      description: String,
+      liks: { type: Number, default: 0 },
+      user_id: {
+         type: Schema.Types.ObjectId,
+         ref: 'User',
+         require: true,
+      },
    },
-   discription: String,
-   liks: { type: Number, default: 0 },
-   user_id: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      require: true
+   {
+      toObject: { virtuals: true },
+      toJSON: { virtuals: true },
    }
-}, {
-   'toObject': { virtuals: true },
-   'toJSON': { virtuals: true }
-});
+);
 
 // CategorySchema.set('toObject', { virtuals: true });
 // CategorySchema.set('toJSON', { virtuals: true });

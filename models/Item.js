@@ -7,6 +7,7 @@ const ItemSchema = new Schema(
       name: {
          type: String,
          required: true,
+         unique:[true,'Item with the same name alredy exisit, find item and cnage its properies, ex: quantitiy or disciriotpn or and featue to the name example: Milk add Swer Milk to the name'],
          minLength: [2, 'Items name should be more than 2 letters'],
       },
       description: {
@@ -14,7 +15,8 @@ const ItemSchema = new Schema(
          default: 'no description..',
       },
       quantity: { type: Number, default: 1 },
-      price_per_Unit: { type: Number, default: 1 },
+      importance: {type:Number,default:1},
+      pricePerUnit: { type: Number, default: 1 },
       unit:{type:String,defualt:'pce'},
       liks: {
          type: Number,
