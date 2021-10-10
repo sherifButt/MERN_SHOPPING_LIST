@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
+   Alert,
    Button,
    Col,
    Container,
@@ -20,9 +21,19 @@ import {
 } from 'reactstrap';
 import { addItem } from '../redux/actions/itemActions';
 import { getCategory } from '../redux/actions/categoryActions';
-import  CategoryModal  from './CategoryModal';
+import { clearErrors } from '../redux/actions/errorActions';
+import CategoryModal from './CategoryModal';
 
-const ItemModal = ({ buttonLabel, className, user_id, addItem, getCategory, categories }) => {
+const ItemModal = ({
+   buttonLabel,
+   className,
+   user_id,
+   addItem,
+   getCategory,
+   categories,
+   error,
+   clearErrors,
+}) => {
    // Modal controll
    const [modal, setModal] = useState(false);
    const [name, setName] = useState(null);
@@ -33,14 +44,14 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem, getCategory, cate
    const [unit, setUnits] = useState(null);
    const [category_id, setCategory_id] = useState();
 
-   const toggle = () => setModal(!modal);
+   const alert = <Alert color="danger">{error.msg}</Alert>;
 
-   useEffect(async () => {
-      getCategory(); //from db
-      
-   }, []);
+   const toggle = () => {
+      setModal(!modal);
+      clearErrors();
+   };
 
-   
+   useEffect(async () => {}, []);
 
    const item = {
       name,
@@ -53,11 +64,16 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem, getCategory, cate
       unit,
    };
 
-   const handleSubmit = e => {
+   const handleSubmit = async e => {
       e.preventDefault();
-      name && addItem(item);
-      toggle();
-      setName('');
+      // Add item via addItem action
+      const result = await addItem(item);
+      // if item added succfuly retruns true..
+      if (result) {
+         toggle();
+         setName('');
+         setDescription('');
+      }
    };
 
    return (
@@ -68,6 +84,7 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem, getCategory, cate
          <Modal isOpen={modal} toggle={toggle} className={className}>
             <ModalHeader toggle={toggle}>ADD ITEM</ModalHeader>
             <ModalBody>
+               {error.id == 'ADD_ITEM_ERROR' || error.id == 'AUTH_ERROR' ? alert : ''}
                <Container>
                   <Form
                      onSubmit={e => {
@@ -108,7 +125,7 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem, getCategory, cate
                                  {/* <Button className="ml-2" size="sm">
                                     + ADD NEw Category
                                  </Button> */}
-                                 <CategoryModal user_id={ user_id}/>
+                                 <CategoryModal user_id={user_id} />
                               </Label>
                               <Input
                                  type="select"
@@ -116,18 +133,20 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem, getCategory, cate
                                  id="exampleSelectMulti"
                                  // options={categories}
                                  onChange={e => {
-                                    const options = e.target.options
-                                    const value = []
-                                    for (var i = 0; i < options.length; i++){
+                                    const options = e.target.options;
+                                    const value = [];
+                                    for (var i = 0; i < options.length; i++) {
                                        if (options[i].selected) {
-                                          value.push(options[i].value)
+                                          value.push(options[i].value);
                                        }
                                     }
-                                    setCategory_id(value)
+                                    setCategory_id(value);
                                  }}
                                  multiple>
                                  {categories.map((category, i) => (
-                                    <option key={i} value={category._id}>{category.name}</option>
+                                    <option key={i} value={category._id}>
+                                       {category.name}
+                                    </option>
                                  ))}
                               </Input>
                               <FormText color="muted">
@@ -207,6 +226,6 @@ const ItemModal = ({ buttonLabel, className, user_id, addItem, getCategory, cate
 const mapPropsToState = state => ({
    user_id: state.auth.user._id ? state.auth.user._id : null,
    categories: state.category.categories,
-   error:state.error
+   error: state.error,
 });
-export default connect(mapPropsToState, { addItem, getCategory })(ItemModal);
+export default connect(mapPropsToState, { addItem, getCategory, clearErrors })(ItemModal);

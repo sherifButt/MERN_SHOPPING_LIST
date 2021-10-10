@@ -18,16 +18,27 @@ const CategoryModal = props => {
    const [dropdownOpen, setDropdownOpen] = useState(false);
    const [name, setName] = useState();
    const [description, setDescription] = useState(null);
+   const [msg, setMsg] = useState(null);
 
    const toggle = () => setDropdownOpen(prevState => !prevState);
-   const category = { name, description, user_id: props.user_id };
+
+   const alert = <Alert color="danger">{props.error.msg}</Alert>;
 
    const submitHandle = e => {
       e.preventDefault();
+      const category = {
+         name,
+         description,
+         user_id: props.user_id,
+      };
+
       props.addCategory(category);
-      console.log(category);
-      if(!props.error)toggle();
+
+      if (!props.error) toggle();
    };
+
+
+
    useEffect(() => {
       props.getCategory();
    }, []);
@@ -36,11 +47,9 @@ const CategoryModal = props => {
          <DropdownToggle caret>ADD CATEGORY</DropdownToggle>
          <DropdownMenu>
             <DropdownItem color="#000000" header>
-               {props.error ? (
-                  <Alert color="primary">props.error</Alert>
-               ) : (
-                  ''
-               )}
+               {props.error.id == 'ADD_CATEGORY_ERROR' || props.error.msg == 'AUTH_ERROR'
+                  ? alert
+                  : ''}
                Add new Category:
             </DropdownItem>
             <DropdownItem text>

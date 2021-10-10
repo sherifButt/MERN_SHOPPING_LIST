@@ -60,9 +60,10 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                            {items.map(({ _id, name, category_id, description }, i) => (
                               <CSSTransition key={_id} timeout={500} classNames="fade">
-                                 <Draggable key={i} draggableId={'draggable-1' + i} index={i}>
+                                 <Draggable key={i + _id} draggableId={'draggable-1' + i} index={i}>
                                     {(provided, snapshot) => (
                                        <div
+                                          key={i + _id}
                                           ref={provided.innerRef}
                                           {...provided.draggableProps}
                                           style={{
@@ -76,7 +77,9 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
                                              {...provided.dragHandleProps}
                                              className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between"
                                              key={`items_${_id}`}>
-                                             <div className="d-flex align-items-center align-middle">
+                                             <div
+                                                key={"o"+i + _id}
+                                                className="d-flex align-items-center align-middle">
                                                 <div>
                                                    {dash}
 
@@ -88,7 +91,7 @@ const ShoppingList = ({ getItems, deleteItem, items, error }) => {
                                                    <span
                                                       className="sm text-sm-left font-weight-light"
                                                       style={{ fontSize: '.7em', color: 'gray' }}>
-                                                      {description.substring(0,21)}{description.length>21?'..':''}
+                                                      {description}
                                                    </span>
                                                 </div>
                                              </div>

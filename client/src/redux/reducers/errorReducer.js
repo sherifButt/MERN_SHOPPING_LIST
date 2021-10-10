@@ -6,7 +6,7 @@ const initialState = {
    id: null,
 };
 
-export default (state = initialState, { type, payload }) => {
+const errorReducer =  (state = initialState, { type, payload }) => {
    switch (type) {
       case actionTypes.GET_ERRORS:
          return {
@@ -26,3 +26,4 @@ export default (state = initialState, { type, payload }) => {
          return state;
    }
 };
+export default errorReducer

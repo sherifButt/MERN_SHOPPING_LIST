@@ -10,6 +10,7 @@ const CategorySchema = new Schema(
          unique: [true, 'category name should be uniqe'],
          minlength: [2, 'Item Category Name should be more than 2 letters'],
       },
+      icon: {type:String},
       description: String,
       liks: { type: Number, default: 0 },
       user_id: {
