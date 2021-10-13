@@ -36,7 +36,7 @@ export const loadUser = () => async (dispatch, getState) => {
       });
    } catch (err) {
       dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'LOGIN_FAIL'));
-      dispatch({ type: actionTypes.AUTH_ERROR });
+      dispatch({ type: actionTypes.LOGIN_FAIL });
       if(!process.env.NODE_ENV === 'production') console.log('Error dispatching LoadUser: ', err.response, err);
    }
 };

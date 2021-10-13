@@ -1,3 +1,4 @@
+const { query } = require('express');
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
@@ -49,7 +50,8 @@ router.post('/', auth, async (req, res) => {
          quantity: req.body.quantity,
          importance: req.body.importance,
          pricePerUnit: req.body.pricePerUnit,
-         unit:req.body.pricePerUnit
+         unit: req.body.pricePerUnit,
+         order: req.body.order,
       });
 
       const savedItem = await newItems.save();
@@ -98,5 +100,33 @@ router.delete('/:id', auth, async (req, res) => {
       });
    }
 });
+
+router.put('/dndreorder/:id',  async (req, res) => {
+   
+   
+   try {
+      // update item in database
+console.log(req.params.id, req.query.desI);
+      const item = await Item.updateOne({ _id: req.params.id }, { order: req.query.desI});
+      if (!item) throw Error(`item #[${req.params.id}] dosnot exist, nothing to delete`);
+
+      console.log(`updated ${req.params.id}`);
+      
+      res.status(200).json({
+         success: true,
+         msg: `item #[${req.params.id}] order  updated successfully -> #${req.query.desI}`,
+         status: 200,
+      });
+
+      // const savedItem = await newItems.save()
+   } catch (e) {
+      console.log(`Error geting data form DB`);
+      res.status(400).json({
+         success: false,
+         message: `Error geting data form DB! ${e}`,
+         status: 400,
+      });
+   }
+})
 
 module.exports = router;

@@ -43,8 +43,10 @@ const CategoryModal = props => {
       props.getCategory();
    }, []);
    return (
-      <Dropdown direction="right" isOpen={dropdownOpen} toggle={toggle} size="sm">
-         <DropdownToggle caret>ADD CATEGORY</DropdownToggle>
+      <Dropdown direction="right" isOpen={dropdownOpen} toggle={toggle}>
+         <DropdownToggle size="sm" color="dark" caret>
+            ADD CATEGORY
+         </DropdownToggle>
          <DropdownMenu>
             <DropdownItem color="#000000" header>
                {props.error.id == 'ADD_CATEGORY_ERROR' || props.error.msg == 'AUTH_ERROR'
@@ -76,7 +78,7 @@ const CategoryModal = props => {
                         onChange={e => setDescription(e.target.value)}></Input>
                   </FormGroup>
 
-                  <Button type="submit" color="dark" onClick={submitHandle}>
+                  <Button size="sm" type="submit" color="dark" onClick={submitHandle}>
                      SAVE
                   </Button>
                </Form>

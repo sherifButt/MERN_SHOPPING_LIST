@@ -33,9 +33,11 @@ const ItemModal = ({
    categories,
    error,
    clearErrors,
+   isAuthenticated,
 }) => {
    // Modal controll
    const [modal, setModal] = useState(false);
+   const [alertSwitch,setAlertSwitch] = useState(false)
    const [name, setName] = useState(null);
    const [description, setDescription] = useState(null);
    const [quantity, setQuantity] = useState(null);
@@ -44,11 +46,16 @@ const ItemModal = ({
    const [unit, setUnits] = useState(null);
    const [category_id, setCategory_id] = useState();
 
-   const alert = <Alert color="danger">{error.msg}</Alert>;
+   const alert = <Alert color="danger">{error.msg ? error.msg :'Please Login first'}</Alert>;
 
    const toggle = () => {
-      setModal(!modal);
-      clearErrors();
+      setAlertSwitch(!alertSwitch)
+      if (isAuthenticated) {
+         setModal(!modal);
+         clearErrors();
+      } else {
+
+      }
    };
 
    useEffect(async () => {}, []);
@@ -78,6 +85,7 @@ const ItemModal = ({
 
    return (
       <div>
+         {(error.id == 'LOGIN_FAIL' || !isAuthenticated) && alertSwitch ? alert : ''}
          <Button color="dark" onClick={toggle} style={{ marginBottom: '2rem' }}>
             {buttonLabel}
          </Button>
@@ -121,11 +129,7 @@ const ItemModal = ({
                         <Col>
                            <FormGroup>
                               <Label for="exampleSelectMulti">
-                                 Categories?{' '}
-                                 {/* <Button className="ml-2" size="sm">
-                                    + ADD NEw Category
-                                 </Button> */}
-                                 <CategoryModal user_id={user_id} />
+                                 Categories? <CategoryModal user_id={user_id} />
                               </Label>
                               <Input
                                  type="select"
@@ -227,5 +231,6 @@ const mapPropsToState = state => ({
    user_id: state.auth.user._id ? state.auth.user._id : null,
    categories: state.category.categories,
    error: state.error,
+   isAuthenticated: state.auth.isAuthenticated,
 });
 export default connect(mapPropsToState, { addItem, getCategory, clearErrors })(ItemModal);
