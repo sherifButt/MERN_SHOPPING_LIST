@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import {  loginToggle, registerToggle } from '../redux/actions/authActions';
 import { connect } from 'react-redux';
 import {
    Alert,
@@ -35,10 +36,14 @@ const ItemModal = ({
    error,
    clearErrors,
    isAuthenticated,
+   loginToggle,
+   registerToggle,
+   isLoginOpen,
+   isRegisterOpen,
 }) => {
    // Modal controll
    const [modal, setModal] = useState(false);
-   const [alertSwitch,setAlertSwitch] = useState(false)
+   const [alertSwitch, setAlertSwitch] = useState(false);
    const [name, setName] = useState(null);
    const [description, setDescription] = useState(null);
    const [quantity, setQuantity] = useState(null);
@@ -47,15 +52,25 @@ const ItemModal = ({
    const [unit, setUnits] = useState(null);
    const [category_id, setCategory_id] = useState();
 
-   const alert = <UncontrolledAlert color="danger">{error.msg ? error.msg :'Please Login first'}</UncontrolledAlert>;
+   const alert = (
+      <UncontrolledAlert color="danger">
+         {error.msg ? error.msg : 'Please Login firsts'}{' '}
+         <a href="#" onClick={loginToggle}>
+            Login
+         </a>
+         { ' '}/{' '}
+         <a href="#" onClick={registerToggle}>
+            Rigester
+         </a>
+      </UncontrolledAlert>
+   );
 
    const toggle = () => {
-      setAlertSwitch(!alertSwitch)
+      setAlertSwitch(!alertSwitch);
       if (isAuthenticated) {
          setModal(!modal);
          clearErrors();
       } else {
-
       }
    };
 
@@ -93,7 +108,9 @@ const ItemModal = ({
          <Modal isOpen={modal} toggle={toggle} className={className}>
             <ModalHeader toggle={toggle}>ADD ITEM</ModalHeader>
             <ModalBody>
-               {(error.id == 'ADD_ITEM_ERROR' || error.id == 'AUTH_ERROR') ? alert : ''} {error.id == 'AUTH_ERROR'? 'hi':''}
+               {error.id == 'ADD_ITEM_ERROR' || error.id == 'AUTH_ERROR' ? alert : ''}{' '}
+
+               {error.id == 'AUTH_ERROR' ? 'hi' : ''}
                <Container>
                   <Form
                      onSubmit={e => {
@@ -233,5 +250,13 @@ const mapPropsToState = state => ({
    categories: state.category.categories,
    error: state.error,
    isAuthenticated: state.auth.isAuthenticated,
+   isRegisterOpen: state.auth.isRegisterOpen,
+   isLoginOpen: state.auth.isLoginOpen,
 });
-export default connect(mapPropsToState, { addItem, getCategory, clearErrors })(ItemModal);
+export default connect(mapPropsToState, {
+   addItem,
+   getCategory,
+   clearErrors,
+   loginToggle,
+   registerToggle
+})(ItemModal);

@@ -52,7 +52,7 @@ const authReducer =  (state = initialState, { type, payload }) => {
       case actionTypes.REGISTER_TOGGLE:
          return {
             ...state,
-            isLoginOpen: !state.isRegisterOpen,
+            isRegisterOpen: !state.isRegisterOpen,
          };
       default:
          return state;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Button, Form, Modal, ModalBody, ModalHeader, NavLink } from 'reactstrap';
-import { register } from '../../redux/actions/authActions';
+import { register,  registerToggle } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
 // COMPONNENTS
 import InputField from '../form/InputField';
@@ -13,6 +13,8 @@ const RegisterModal = ({
    error,
    register,
    clearErrors,
+   registerToggle,
+   isRegisterOpen,
 }) => {
    // redux
    // const dispatch = useDispatch();
@@ -30,6 +32,7 @@ const RegisterModal = ({
 
    const handleToggle = useCallback(() => {
       setModal(!modal);
+      registerToggle(!isRegisterOpen);
       clearErrors();
    }, [modal]);
 
@@ -60,15 +63,15 @@ const RegisterModal = ({
       else setMsg(null);
       // clearErrors();
       // If authintecated, close modal
-      if (modal) if (isAuthenticated) handleToggle();
-   }, [error, handleToggle, isAuthenticated, modal]);
+      if (isRegisterOpen) if (isAuthenticated) handleToggle();
+   }, [error, handleToggle, isAuthenticated, isRegisterOpen]);
 
    return (
       <div>
          <NavLink href="#" color="danger" onClick={handleToggle} style={{ marginBottom: '2rem' }}>
             {buttonLabel}
          </NavLink>
-         <Modal isOpen={modal} toggle={handleToggle} className={className}>
+         <Modal isOpen={isRegisterOpen} toggle={handleToggle} className={className}>
             <ModalHeader toggle={handleToggle}>Register User</ModalHeader>
             <ModalBody>
                {error.msg ? <Alert color="danger"> {error.msg} </Alert> : null}
@@ -117,6 +120,7 @@ const RegisterModal = ({
 const mapStateToPropos = state => ({
    error: state.error,
    isAuthenticated: state.auth.isAuthenticated,
+   isRegisterOpen: state.auth.isRegisterOpen,
 });
 
-export default connect(mapStateToPropos, { register, clearErrors })(RegisterModal);
+export default connect(mapStateToPropos, { register, clearErrors, registerToggle })(RegisterModal);
