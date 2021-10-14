@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { loginToggle, registerToggle } from '../redux/actions/authActions';
 
 // REDUX
 import { connect } from 'react-redux';
@@ -36,6 +37,8 @@ const ShoppingList = ({
    itemDndReOrder,
    itemDndReArrange,
    returnErrors,
+   loginToggle,
+   registerToggle,
 }) => {
    // STATE
    const [dragDrop, setDragDrop] = useState(false);
@@ -96,7 +99,16 @@ const ShoppingList = ({
          }}>
          <Container>
             {error.id === 'D&D_AUTH_ERROR' || error.id === 'AUTH_ERROR' ? (
-               <UncontrolledAlert color="danger">{error.msg}</UncontrolledAlert>
+               <UncontrolledAlert color="danger">
+                  {error.msg}{' '}
+                  <a href="#" onClick={loginToggle}>
+                     Login
+                  </a>{' '}
+                  /{' '}
+                  <a href="#" onClick={registerToggle}>
+                     Rigester
+                  </a>
+               </UncontrolledAlert>
             ) : (
                ''
             )}
@@ -194,4 +206,6 @@ export default connect(mapStateToProps, {
    itemDndReOrder,
    itemDndReArrange,
    returnErrors,
+   loginToggle,
+   registerToggle,
 })(ShoppingList);
