@@ -1,35 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Alert, Button, Form, Modal, ModalBody, ModalHeader, NavLink } from 'reactstrap';
 import { login } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
-
 // COMPONNENTS
 import InputField from '../form/InputField';
 
-import {
-   Alert,
-   Input,
-   Label,
-   FormGroup,
-   FormFeedback,
-   Button,
-   Modal,
-   ModalHeader,
-   ModalBody,
-   Form,
-   NavLink,
-   FormText,
-} from 'reactstrap';
-
-const Login = ({
-   buttonLabel,
-   className,
-   isAuthenticated,
-   error,
-   login,
-   clearErrors,
-}) => {
-   
+const Login = ({ buttonLabel, className, isAuthenticated, error, login, clearErrors }) => {
    // STATE
    // Modal controll
    const [modal, setModal] = useState(false);

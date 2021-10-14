@@ -1,6 +1,6 @@
-import actionTypes from '../constants/actionTypes';
 import axios from 'axios';
-import { returnErrors,clearErrors } from '../actions/errorActions';
+import { clearErrors, returnErrors } from '../actions/errorActions';
+import actionTypes from '../constants/actionTypes';
 
 // check tocken and load user
 export const loadUser = () => async (dispatch, getState) => {
@@ -27,7 +27,7 @@ export const loadUser = () => async (dispatch, getState) => {
       // }
 
       const response = await axios.get(`/api/auth/user/`, tokenConfig(getState, dispatch));
-      
+
       const user = response.data.user;
 
       dispatch({
@@ -37,7 +37,8 @@ export const loadUser = () => async (dispatch, getState) => {
    } catch (err) {
       dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'LOGIN_FAIL'));
       dispatch({ type: actionTypes.LOGIN_FAIL });
-      if(!process.env.NODE_ENV === 'production') console.log('Error dispatching LoadUser: ', err.response, err);
+      if (!process.env.NODE_ENV === 'production')
+         console.log('Error dispatching LoadUser: ', err.response, err);
    }
 };
 
@@ -80,8 +81,7 @@ export const login = user => async dispatch => {
 
       const existingUser = response.data.user;
       dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: { user: existingUser, token: token } });
-      dispatch(clearErrors)
-
+      dispatch(clearErrors);
    } catch (err) {
       console.log('Error dispatching login: ' + err.response.data.msg, err.response.data.status);
       dispatch(returnErrors(err.response.data.msg, err.response.data.status, 'LOGIN_FAIL'));

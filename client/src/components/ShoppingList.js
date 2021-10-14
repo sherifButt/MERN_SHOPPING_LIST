@@ -1,16 +1,26 @@
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 // REDUX
 import { connect } from 'react-redux';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { Tooltip,Button, Container, ListGroup, ListGroupItem, Badge, CustomInput, Alert } from 'reactstrap';
+import { TransitionGroup } from 'react-transition-group';
+import {
+   Alert,
+   Badge,
+   Button,
+   Col,
+   Container,
+   CustomInput,
+   ListGroup,
+   ListGroupItem,
+   Row,
+} from 'reactstrap';
+import { returnErrors } from '../redux/actions/errorActions';
 import {
    deleteItem,
    getItems,
-   itemDndReOrder,
    itemDndReArrange,
+   itemDndReOrder,
 } from '../redux/actions/itemActions';
-import { returnErrors } from '../redux/actions/errorActions'
 // COMPONNETNT
 import ItemModal from './ItemModal';
 
@@ -24,9 +34,12 @@ const ShoppingList = ({
    itemDndReArrange,
    returnErrors,
 }) => {
+   // STATE
+   const [dragDrop,setDragDrop] = useState(false)
    useEffect(() => {
       getItems();
    }, []);
+
 
    // html
    const dash = <span color="gray"> = </span>;
@@ -76,64 +89,89 @@ const ShoppingList = ({
             }
          }}>
          <Container>
-            {error.id === 'D&D_AUTH_ERROR' ? (
+            {error.id === 'D&D_AUTH_ERROR' || error.id === 'AUTH_ERROR' ? (
                <Alert color="danger">{error.msg}</Alert>
             ) : (
                ''
             )}
             <ItemModal buttonLabel="Add Item" />
+            <Row>
+               <Col>
+                  {isAuthenticated ? (
+                     <CustomInput
+                        className="ml-5 mb-2"
+                        type="switch"
+                        id="exampleCustomSwitch"
+                        name="customSwitch"
+                        label="Itmes Re-arrange"
+                        onClick={e => setDragDrop(!dragDrop)}
+                     />
+                  ) : (
+                     ''
+                  )}
+               </Col>
+            </Row>
             <ListGroup>
                <TransitionGroup className="shopping-list">
                   <Droppable droppableId="droppable-1" type="Items">
                      {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
-                           {items.map(({ _id, name, category_id, description, order }, i) => (
-                              <Draggable key={_id} draggableId={'draggable-1' + _id} index={i}>
-                                 {(provided, snapshot) => (
-                                    <div
-                                       // key={i + _id}
-                                       ref={provided.innerRef}
-                                       {...provided.draggableProps}
-                                       style={{
-                                          ...provided.draggableProps.style,
-                                          boxShadow: snapshot.isDragging
-                                             ? '0 0 .9rem #66666640'
-                                             : 'none',
-                                          // borderRadius: snapshot.isDragging ? '5px' : 'none',
-                                       }}>
-                                       <ListGroupItem
-                                          {...provided.dragHandleProps}
-                                          className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between"
-                                          // key={`listItem_${_id}`}
-                                       >
-                                          <div
-                                             // key={"o"+i + _id}
-                                             className="d-flex align-items-center align-middle">
+                           {items.map(
+                              ({ _id, name, category_id, description, order, user_id }, i) => (
+                                 <Draggable
+                                    key={_id}
+                                    draggableId={'draggable-1' + _id}
+                                    index={i}
+                                    isDragDisabled={!dragDrop}>
+                                    {(provided, snapshot) => (
+                                       <div
+                                          // key={i + _id}
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          style={{
+                                             ...provided.draggableProps.style,
+                                             boxShadow: snapshot.isDragging
+                                                ? '0 0 .9rem #66666640'
+                                                : 'none',
+                                             // borderRadius: snapshot.isDragging ? '5px' : 'none',
+                                          }}>
+                                          <ListGroupItem
+                                             {...provided.dragHandleProps}
+                                             className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between"
+                                             // key={`listItem_${_id}`}
+                                          >
+                                             <div
+                                                // key={"o"+i + _id}
+                                                className="d-flex align-items-center align-middle">
+                                                <div>
+                                                   {dragDrop ? dash : ''}
+
+                                                   {button(_id)}
+                                                </div>
+
+                                                <div className="d-flex  flex-column">
+                                                   <span style={{ fontSize: '.7em', color: 'gray' }}>
+                                                      {user_id.name.split(' ')[0]} need's
+                                                   </span>{' '}
+                                                   {name.charAt(0).toUpperCase() + name.slice(1)}
+                                                   {/* {order} */}
+                                                   <span
+                                                      className="sm text-sm-left font-weight-light"
+                                                      style={{ fontSize: '.7em', color: 'gray' }}>
+                                                      {description}
+                                                   </span>
+                                                </div>
+                                             </div>
                                              <div>
-                                                {dash}
-
-                                                {button(_id)}
+                                                {categoriesList(category_id)}
+                                                {isAuthenticated ? purchased(_id) : ''}
                                              </div>
-
-                                             <div className="d-flex  flex-column">
-                                                {name.charAt(0).toUpperCase() + name.slice(1)}
-                                                {/* {order} */}
-                                                <span
-                                                   className="sm text-sm-left font-weight-light"
-                                                   style={{ fontSize: '.7em', color: 'gray' }}>
-                                                   {description}
-                                                </span>
-                                             </div>
-                                          </div>
-                                          <div>
-                                             {categoriesList(category_id)}
-                                             {isAuthenticated ? purchased(_id) : ''}
-                                          </div>
-                                       </ListGroupItem>
-                                    </div>
-                                 )}
-                              </Draggable>
-                           ))}
+                                          </ListGroupItem>
+                                       </div>
+                                    )}
+                                 </Draggable>
+                              )
+                           )}
                            {provided.placeholder}
                         </div>
                      )}
