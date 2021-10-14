@@ -1,12 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Button, Form, Modal, ModalBody, ModalHeader, NavLink } from 'reactstrap';
-import { login } from '../../redux/actions/authActions';
+import { login,loginToggle,registerToggle } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
 // COMPONNENTS
 import InputField from '../form/InputField';
 
-const Login = ({ buttonLabel, className, isAuthenticated, error, login, clearErrors }) => {
+const Login = ({
+   buttonLabel,
+   className,
+   isAuthenticated,
+   error,
+   login,
+   clearErrors,
+   loginToggle,
+   registerToggle,
+   isLoginOpen,
+}) => {
    // STATE
    // Modal controll
    const [modal, setModal] = useState(false);
@@ -17,6 +27,7 @@ const Login = ({ buttonLabel, className, isAuthenticated, error, login, clearErr
 
    const handleToggle = useCallback(() => {
       setModal(!modal);
+      loginToggle(!isLoginOpen);
       clearErrors();
    }, [modal]);
 
@@ -55,7 +66,7 @@ const Login = ({ buttonLabel, className, isAuthenticated, error, login, clearErr
          <NavLink href="#" color="danger" onClick={handleToggle} style={{ marginBottom: '2rem' }}>
             {buttonLabel}
          </NavLink>
-         <Modal isOpen={modal} toggle={handleToggle} className={className}>
+         <Modal isOpen={isLoginOpen} toggle={handleToggle} className={className}>
             <ModalHeader toggle={handleToggle}>Login</ModalHeader>
             <ModalBody>
                {error.msg ? <Alert color="danger"> {error.msg} </Alert> : null}
@@ -104,6 +115,9 @@ const Login = ({ buttonLabel, className, isAuthenticated, error, login, clearErr
 const mapStateToPropos = state => ({
    error: state.error,
    isAuthenticated: state.auth.isAuthenticated,
+   isLoginOpen: state.auth.isLoginOpen
 });
 
-export default connect(mapStateToPropos, { login, clearErrors })(Login);
+export default connect(mapStateToPropos, { login, clearErrors, loginToggle, registerToggle })(
+   Login
+);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+
 // REDUX
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
@@ -13,6 +14,7 @@ import {
    ListGroup,
    ListGroupItem,
    Row,
+   UncontrolledAlert,
 } from 'reactstrap';
 import { returnErrors } from '../redux/actions/errorActions';
 import {
@@ -21,6 +23,7 @@ import {
    itemDndReArrange,
    itemDndReOrder,
 } from '../redux/actions/itemActions';
+
 // COMPONNETNT
 import ItemModal from './ItemModal';
 
@@ -35,14 +38,13 @@ const ShoppingList = ({
    returnErrors,
 }) => {
    // STATE
-   const [dragDrop,setDragDrop] = useState(false)
+   const [dragDrop, setDragDrop] = useState(false);
    useEffect(() => {
       getItems();
    }, []);
 
-
    // html
-   const dash = <span color="gray"> = </span>;
+   const dash = dragDrop ? <span color="gray"> = </span> : '';
    const button = _id => {
       return (
          <Button
@@ -68,7 +70,11 @@ const ShoppingList = ({
          );
       });
    const purchased = _id => {
-      return <CustomInput type="checkbox" id={_id} label="" className="ml-3" inline />;
+      return isAuthenticated ? (
+         <CustomInput type="checkbox" id={_id} label="" className="ml-3" inline />
+      ) : (
+         ''
+      );
    };
 
    return (
@@ -90,7 +96,7 @@ const ShoppingList = ({
          }}>
          <Container>
             {error.id === 'D&D_AUTH_ERROR' || error.id === 'AUTH_ERROR' ? (
-               <Alert color="danger">{error.msg}</Alert>
+               <UncontrolledAlert color="danger">{error.msg}</UncontrolledAlert>
             ) : (
                ''
             )}
@@ -125,7 +131,6 @@ const ShoppingList = ({
                                     isDragDisabled={!dragDrop}>
                                     {(provided, snapshot) => (
                                        <div
-                                          // key={i + _id}
                                           ref={provided.innerRef}
                                           {...provided.draggableProps}
                                           style={{
@@ -137,24 +142,19 @@ const ShoppingList = ({
                                           }}>
                                           <ListGroupItem
                                              {...provided.dragHandleProps}
-                                             className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between"
-                                             // key={`listItem_${_id}`}
-                                          >
-                                             <div
-                                                // key={"o"+i + _id}
-                                                className="d-flex align-items-center align-middle">
+                                             className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between">
+                                             <div className="d-flex align-items-center align-middle">
                                                 <div>
-                                                   {dragDrop ? dash : ''}
-
+                                                   {dash}
                                                    {button(_id)}
                                                 </div>
 
                                                 <div className="d-flex  flex-column">
-                                                   <span style={{ fontSize: '.7em', color: 'gray' }}>
+                                                   <span
+                                                      style={{ fontSize: '.7em', color: 'gray' }}>
                                                       {user_id.name.split(' ')[0]} need's
                                                    </span>{' '}
                                                    {name.charAt(0).toUpperCase() + name.slice(1)}
-                                                   {/* {order} */}
                                                    <span
                                                       className="sm text-sm-left font-weight-light"
                                                       style={{ fontSize: '.7em', color: 'gray' }}>
@@ -164,7 +164,7 @@ const ShoppingList = ({
                                              </div>
                                              <div>
                                                 {categoriesList(category_id)}
-                                                {isAuthenticated ? purchased(_id) : ''}
+                                                {purchased(_id)}
                                              </div>
                                           </ListGroupItem>
                                        </div>

@@ -18,6 +18,7 @@ import {
    ModalHeader,
    NavLink,
    Row,
+   UncontrolledAlert,
 } from 'reactstrap';
 import { addItem } from '../redux/actions/itemActions';
 import { getCategory } from '../redux/actions/categoryActions';
@@ -46,7 +47,7 @@ const ItemModal = ({
    const [unit, setUnits] = useState(null);
    const [category_id, setCategory_id] = useState();
 
-   const alert = <Alert color="danger">{error.msg ? error.msg :'Please Login first'}</Alert>;
+   const alert = <UncontrolledAlert color="danger">{error.msg ? error.msg :'Please Login first'}</UncontrolledAlert>;
 
    const toggle = () => {
       setAlertSwitch(!alertSwitch)
@@ -92,7 +93,7 @@ const ItemModal = ({
          <Modal isOpen={modal} toggle={toggle} className={className}>
             <ModalHeader toggle={toggle}>ADD ITEM</ModalHeader>
             <ModalBody>
-               {error.id == 'ADD_ITEM_ERROR' || error.id == 'AUTH_ERROR' ? alert : ''}
+               {(error.id == 'ADD_ITEM_ERROR' || error.id == 'AUTH_ERROR') ? alert : ''} {error.id == 'AUTH_ERROR'? 'hi':''}
                <Container>
                   <Form
                      onSubmit={e => {

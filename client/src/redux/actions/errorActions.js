@@ -1,11 +1,11 @@
 import actionTypes from '../constants/actionTypes';
 
 export const returnErrors = (msg, status, id = null) => dispatch => {
-   dispatch(clearErrors())
-   return {
+  
+   dispatch ({
       type: actionTypes.GET_ERRORS,
       payload: { msg, status, id },
-   };
+   });
 };
 
 export const clearErrors = () => {

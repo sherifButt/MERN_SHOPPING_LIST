@@ -88,6 +88,19 @@ export const login = user => async dispatch => {
    }
 };
 
+export const registerToggle = () => {
+
+   return {
+      type: actionTypes.REGISTER_TOGGLE,
+   };
+}
+export const loginToggle = () => {
+
+   return {
+      type: actionTypes.LOGIN_TOGGLE,
+   };
+}
+
 export const tokenConfig = (getState, dispatch) => {
    const token = getState().auth.token;
 
