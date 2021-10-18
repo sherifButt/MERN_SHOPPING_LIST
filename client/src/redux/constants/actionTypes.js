@@ -26,6 +26,10 @@ const actionTypes = {
 
    GET_ERRORS: 'GET_ERRORS',
    CLEAR_ERRORS: 'CLEAR_ERRORS',
+
+   // statistics:
+   GET_COUNT:'GET_COUNT',
+   ADD_COUNT:'ADD_COUNT',
 };
 
 export default actionTypes;

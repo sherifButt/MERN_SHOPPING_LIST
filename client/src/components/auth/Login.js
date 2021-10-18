@@ -58,7 +58,9 @@ const Login = ({
       else setMsg(null);
       // clearErrors();
       // If authintecated, close modal
-      if (modal) if (isAuthenticated) handleToggle();
+      if (modal) if (isAuthenticated) {
+         handleToggle()
+      };
    }, [error, handleToggle, isAuthenticated, modal]);
 
    return (

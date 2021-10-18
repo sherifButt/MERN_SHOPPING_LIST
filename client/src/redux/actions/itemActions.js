@@ -2,33 +2,23 @@ import axios from 'axios';
 import actionTypes from '../constants/actionTypes';
 import { tokenConfig } from './authActions';
 import { returnErrors, clearErrors } from './errorActions';
+import { CountObjects } from 'count-objects';
 
 export const getItems = () => async dispatch => {
    dispatch(setItemsLoading());
    try {
       const res = await axios.get('/api/items');
 
-      // const itemsOriginal = JSON.parse(JSON.stringify(res.data));
-      const items = res.data;
+      const items = res.data.items;
+      const count = res.data.count;
       items.sort((a, b) => a.order - b.order);
-
-      // add order number to empty order field
-   //   items.map((item, i) => (item.order = i));
-      // console.log('-->2', items,itemsOriginal);
-
-      // for (let i = 0; i < items.length; i++) {
-      //    console.log(i, items[i].order, itemsOriginal[i].order);
-      //    if (items[i].order != itemsOriginal[i].order) {
-      //        dispatch(itemDndReOrder(items[i]._id,null, i));
-      //    }
-      // }
 
       await dispatch({
          type: actionTypes.GET_ITEMS,
-         payload: items,
+         payload: { items, count },
       });
 
-      // dispatch(clearErrors);
+      return true;
    } catch (err) {
       dispatch(
          returnErrors(
@@ -41,6 +31,8 @@ export const getItems = () => async dispatch => {
          err.response ? err.response.data.message : 'Faild to connect to database',
          err
       );
+
+      return false;
    }
 };
 
@@ -58,11 +50,15 @@ export const addItem = item => async (dispatch, getState) => {
       console.log(getState().item.items.length);
 
       const res = await axios.post('/api/items', item, tokenConfig(getState, dispatch));
+      let items = [...getState().item.items, res.data];
+      const items_ = JSON.parse(JSON.stringify(items));
+      const co = new CountObjects(items_);
 
       dispatch({
          type: actionTypes.ADD_ITEM,
-         payload: res.data,
+         payload: { items: res.data, count: co.count() },
       });
+
       // dispatchd(clearErrors())
       return true;
    } catch (err) {
@@ -80,9 +76,15 @@ export const addItem = item => async (dispatch, getState) => {
 export const deleteItem = _id => async (dispatch, getState) => {
    try {
       await axios.delete('/api/items/' + _id, tokenConfig(getState, dispatch));
+
+      let items = [...getState().item.items];
+      items = items.filter(item => item._id !== _id)
+      const items_ = JSON.parse(JSON.stringify(items));
+      const co = new CountObjects(items_);
+
       dispatch({
          type: actionTypes.DELETE_ITEM,
-         payload: _id,
+         payload: {items,count:co.count()},
       });
    } catch (err) {
       dispatch({
@@ -102,15 +104,14 @@ export const setItemsLoading = () => {
 export const itemDndReOrder = (_id, srcI, desI) => async (dispatch, getState) => {
    try {
       const res = await axios.put(
-         `/api/items/dndreorder/${ _id }?srcI=${ srcI }&desI=${ desI }`
-         ,tokenConfig(getState, dispatch)
+         `/api/items/dndreorder/${_id}?srcI=${srcI}&desI=${desI}`,
+         tokenConfig(getState, dispatch)
       );
-      console.log(`updated ${ _id }`);
+      console.log(`updated ${_id}`);
       // dispatch({
       //    type: actionTypes.REORDER_ITEMS,
       //    payload: { _id, srcI, desI },
       // });
-      
    } catch (e) {
       // dispatch({
       //    type: actionTypes.GET_ERRORS,
@@ -125,43 +126,43 @@ export const itemDndReOrder = (_id, srcI, desI) => async (dispatch, getState) =>
    }
 };
 
+export const itemDndReArrange =
+   ({ item0, item1 }) =>
+   async (dispatch, getState) => {
+      try {
+         // console.log(item0._id)
+         dispatch({
+            type: actionTypes.REORDER_ITEMS,
+            payload: {
+               item0: { _id: item0._id, srcI: item0.srcI, desI: item0.desI },
+               item1: { _id: item1._id, srcI: item1.srcI, desI: item1.desI },
+            },
+         });
+         getState().item.items.map(async (item, i) => {
+            await axios.put(
+               `/api/items/dndreorder/${item._id}?srcI=${null}&desI=${item.order}`,
+               tokenConfig(getState, dispatch)
+            );
+         });
+         // const res1 = await axios.put(
+         //    `/api/items/dndreorder/${item1._id}?srcI=${item1.srcI}&desI=${item1.desI}`,
+         //    tokenConfig(getState, dispatch)
+         // );
 
-export const itemDndReArrange = ({item0,item1}) => async (dispatch, getState) => {
-   try {
-      // console.log(item0._id)
-      dispatch({
-         type: actionTypes.REORDER_ITEMS,
-         payload: {
-            item0: { _id: item0._id, srcI: item0.srcI, desI: item0.desI },
-            item1: { _id: item1._id, srcI: item1.srcI, desI: item1.desI },
-         },
-      });
-      getState().item.items.map(async (item, i) => {
-         
-         await axios.put(
-            `/api/items/dndreorder/${item._id}?srcI=${null}&desI=${item.order}`,
-            tokenConfig(getState, dispatch)
+         // console.log(`updated ${_id}`);
+         // console.log(item0,item1)
+         // dispatch(getItems())
+         // console.log(getState().item.items);
+      } catch (e) {
+         // dispatch({
+         //    type: actionTypes.GET_ERRORS,
+         //    payload: e.response.data,
+         // });
+         returnErrors(
+            e.response ? e.response.data.msg : 'faild to connect to databse',
+            e.response ? e.response.status : '500',
+            'REORDER_ITEMS'
          );
-      })
-      // const res1 = await axios.put(
-      //    `/api/items/dndreorder/${item1._id}?srcI=${item1.srcI}&desI=${item1.desI}`,
-      //    tokenConfig(getState, dispatch)
-      // );
-      
-      // console.log(`updated ${_id}`);
-      // console.log(item0,item1)
-      // dispatch(getItems())
-      // console.log(getState().item.items);
-   } catch (e) {
-      // dispatch({
-      //    type: actionTypes.GET_ERRORS,
-      //    payload: e.response.data,
-      // });
-      returnErrors(
-         e.response ? e.response.data.msg : 'faild to connect to databse',
-         e.response ? e.response.status : '500',
-         'REORDER_ITEMS'
-      );
-      //console.log('Error dispatching REORDER_ITEMS: ', e.response.data.message, e);
-   }
-};
+         //console.log('Error dispatching REORDER_ITEMS: ', e.response.data.message, e);
+      }
+   };

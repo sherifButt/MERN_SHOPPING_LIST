@@ -7,11 +7,13 @@ import './App.css';
 import AppNavbar from './components/AppNavbar';
 import ShoppingList from './components/ShoppingList';
 import Footer from './components/Footer'
+// import Charts from './components/Charts'
 
 import { Provider } from 'react-redux';
 import store from './redux';
 
 import { loadUser } from './redux/actions/authActions';
+import Chart from './components/Charts';
 
 function App() {
    useEffect(() => {
@@ -22,6 +24,7 @@ function App() {
       <div className="App">
          <Provider store={store}>
             <AppNavbar />
+            {/* <Charts/> */}
             <ShoppingList />
             {/* <Footer /> */}
          

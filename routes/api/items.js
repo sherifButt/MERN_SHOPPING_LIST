@@ -1,8 +1,9 @@
 const { query } = require('express');
 const express = require('express');
+const i = require('../../client/src/helpers/items');
+const { CountObjects } = require('count-objects');
 const router = express.Router();
 const auth = require('../../middleware/auth');
-
 
 // Item Model
 const Item = require('../../models/Item');
@@ -25,7 +26,17 @@ router.get('/', async (req, res) => {
                select: '-password -email',
             },
          });
-      res.status(200).json(items);
+      //console.log(items)
+      const items_ = JSON.parse(JSON.stringify(items))
+       const co =  new CountObjects(items_);
+
+      res.status(200).json({
+         success: true,
+         msg: `items loaded successfully`,
+         status: 200,
+         items,
+         count: co.count(),
+      });
    } catch (e) {
       console.log(`Error geting data form DB! ${e}`);
       res.status(404).json({
@@ -55,12 +66,15 @@ router.post('/', auth, async (req, res) => {
       });
 
       const savedItem = await newItems.save();
-      if(!savedItem)  throw {
-         message: `cannot save item [${name}] `,
-         status: 401,
-         id: 'DB_ERROR',
-      };
-    const retrivedItem = await Item.findById(savedItem.id).populate({path:'user_id',select:"-password"}).populate({path:"category_id"})
+      if (!savedItem)
+         throw {
+            message: `cannot save item [${name}] `,
+            status: 401,
+            id: 'DB_ERROR',
+         };
+      const retrivedItem = await Item.findById(savedItem.id)
+         .populate({ path: 'user_id', select: '-password' })
+         .populate({ path: 'category_id' });
       res.status(200).json(retrivedItem);
    } catch (e) {
       console.log(`Error geting data form DB ${e}`);
@@ -101,17 +115,15 @@ router.delete('/:id', auth, async (req, res) => {
    }
 });
 
-router.put('/dndreorder/:id',  async (req, res) => {
-   
-   
+router.put('/dndreorder/:id', async (req, res) => {
    try {
       // update item in database
-console.log(req.params.id, req.query.desI);
-      const item = await Item.updateOne({ _id: req.params.id }, { order: req.query.desI});
+      console.log(req.params.id, req.query.desI);
+      const item = await Item.updateOne({ _id: req.params.id }, { order: req.query.desI });
       if (!item) throw Error(`item #[${req.params.id}] dosnot exist, nothing to delete`);
 
       console.log(`updated ${req.params.id}`);
-      
+
       res.status(200).json({
          success: true,
          msg: `item #[${req.params.id}] order  updated successfully -> #${req.query.desI}`,
@@ -127,6 +139,6 @@ console.log(req.params.id, req.query.desI);
          status: 400,
       });
    }
-})
+});
 
 module.exports = router;

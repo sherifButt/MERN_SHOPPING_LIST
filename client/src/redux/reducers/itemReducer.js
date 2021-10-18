@@ -2,6 +2,7 @@ import actionTypes from '../constants/actionTypes';
 
 const initialState = {
    items: [],
+   count:{},
    loading: actionTypes.ITEMS_LOADING,
    count: 0,
 };
@@ -11,20 +12,23 @@ const itemReducer = (state = initialState, { type, payload }) => {
       case actionTypes.GET_ITEMS:
          return {
             ...state,
-            items: payload,
+            items: payload.items,
+            count:payload.count,
             loading: false,
          };
       case actionTypes.ADD_ITEM:
          return payload
             ? {
                  ...state,
-                 items: [payload, ...state.items],
+               items: [payload.items, ...state.items],
+                 count:{...payload.count}
               }
             : { ...state };
       case actionTypes.DELETE_ITEM: {
          return {
             ...state,
-            items: state.items.filter(item => item._id !== payload),
+            items: [...payload.items],
+            count: {...payload.count}
          };
       }
       case actionTypes.ITEMS_LOADING:
