@@ -41,7 +41,7 @@ const ItemModal = ({
    isLoginOpen,
    isRegisterOpen,
 }) => {
-   // Modal controll
+   // Modal control
    const [modal, setModal] = useState(false);
    const [alertSwitch, setAlertSwitch] = useState(false);
    const [name, setName] = useState(null);
@@ -49,7 +49,7 @@ const ItemModal = ({
    const [quantity, setQuantity] = useState(null);
    const [importance, setImportance] = useState(null);
    const [pricePerUnit, setPricePerUnit] = useState(null);
-   const [unit, setUnits] = useState(null);
+   const [unit, setUnits] = useState("pce");
    const [category_id, setCategory_id] = useState();
 
    const alert = (
@@ -58,9 +58,9 @@ const ItemModal = ({
          <a href="#" onClick={loginToggle}>
             Login
          </a>
-         { ' '}/{' '}
+         {' '}/{' '}
          <a href="#" onClick={registerToggle}>
-            Rigester
+            Register
          </a>
       </UncontrolledAlert>
    );
@@ -84,7 +84,7 @@ const ItemModal = ({
       quantity,
       importance,
       pricePerUnit,
-      unit,
+       unit,
    };
 
    const handleSubmit = async e => {
@@ -101,31 +101,32 @@ const ItemModal = ({
 
    return (
       <div>
-         {(error.id == 'LOGIN_FAIL' || !isAuthenticated) && alertSwitch ? alert : ''}
-         <Button color="dark" onClick={toggle} style={{ marginBottom: '2rem' }}>
+         {(error.id == "LOGIN_FAIL" || !isAuthenticated) && alertSwitch ? alert : ""}
+         <Button color="dark" onClick={toggle} style={{ marginBottom: "2rem" }}>
             {buttonLabel}
          </Button>
          <Modal isOpen={modal} toggle={toggle} className={className}>
             <ModalHeader toggle={toggle}>ADD ITEM</ModalHeader>
             <ModalBody>
-               {error.id == 'ADD_ITEM_ERROR' || error.id == 'AUTH_ERROR' ? alert : ''}{' '}
-
-               {error.id == 'AUTH_ERROR' ? 'hi' : ''}
+               {error.id == "ADD_ITEM_ERROR" || error.id == "AUTH_ERROR" ? alert : ""}{" "}
+               {error.id == "AUTH_ERROR" ? "hi" : ""}
                <Container>
                   <Form
-                     onSubmit={e => {
+                     onSubmit={(e) => {
                         e.preventDefault();
-                     }}>
+                     }}
+                  >
                      <Row>
                         <Col>
                            <FormGroup>
-                              <Label for="name">name</Label>
+                              <Label for="name">Item Name</Label>
                               <Input
                                  id="name"
                                  type="text"
                                  name="name"
-                                 placeholder="Johan Doh"
-                                 onChange={e => setName(e.target.value)}></Input>
+                                 placeholder="Red Apple"
+                                 onChange={(e) => setName(e.target.value)}
+                              ></Input>
                               <FormFeedback valid>Sweet! that name is available</FormFeedback>
                            </FormGroup>
                         </Col>
@@ -133,13 +134,14 @@ const ItemModal = ({
                      <Row>
                         <Col>
                            <FormGroup>
-                              <label for="description">Discription</label>
+                              <label for="description">Description</label>
                               <Input
                                  id="description"
                                  type="textarea"
                                  name="description"
-                                 placeholder="This items description...."
-                                 onChange={e => setDescription(e.target.value)}></Input>
+                                 placeholder="Sweet preferably western-Europe production...."
+                                 onChange={(e) => setDescription(e.target.value)}
+                              ></Input>
                            </FormGroup>
                         </Col>
                      </Row>
@@ -154,7 +156,7 @@ const ItemModal = ({
                                  name="selectMulti"
                                  id="exampleSelectMulti"
                                  // options={categories}
-                                 onChange={e => {
+                                 onChange={(e) => {
                                     const options = e.target.options;
                                     const value = [];
                                     for (var i = 0; i < options.length; i++) {
@@ -164,7 +166,8 @@ const ItemModal = ({
                                     }
                                     setCategory_id(value);
                                  }}
-                                 multiple>
+                                 multiple
+                              >
                                  {categories.map((category, i) => (
                                     <option key={i} value={category._id}>
                                        {category.name}
@@ -180,32 +183,36 @@ const ItemModal = ({
                      <Row>
                         <Col>
                            <FormGroup>
-                              <label for="quantity">Quatitiy</label>
-                              <Input
-                                 id="quantity"
-                                 type="number"
-                                 name="quantity"
-                                 placeholder="1"
-                                 min={1}
-                                 max={100}
-                                 onChange={e => setQuantity(e.target.value)}></Input>
+                              <label for="quantity">Quantity</label>
+                              <InputGroup>
+                                 <InputGroupAddon addonType="prepend">pce</InputGroupAddon>
+                                 <Input
+                                    id="quantity"
+                                    type="number"
+                                    name="quantity"
+                                    placeholder="1"
+                                    min={1}
+                                    max={100}
+                                    onChange={(e) => setQuantity(e.target.value)}
+                                 ></Input>
+                              </InputGroup>
                            </FormGroup>
                         </Col>
                         <Col>
                            <FormGroup>
-                              <label for="description">Price per unit</label>
+                              <label for="description">Price per Unit/Pec</label>
                               <InputGroup>
-                                 <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                                 <InputGroupAddon addonType="prepend">£</InputGroupAddon>
                                  <Input
                                     id="price"
-                                    placeholder="Amount"
-                                    min={0}
+                                    placeholder=".12"
+                                    min={0.0}
                                     max={100}
                                     type="number"
-                                    step="1"
-                                    onChange={e => setPricePerUnit(e.target.value)}
+                                    step=".01"
+                                    onChange={(e) => setPricePerUnit(e.target.value)}
                                  />
-                                 <InputGroupAddon addonType="append">.00</InputGroupAddon>
+                                 {/* <InputGroupAddon addonType="append">.00</InputGroupAddon> */}
                               </InputGroup>
                            </FormGroup>
                         </Col>
@@ -220,7 +227,7 @@ const ItemModal = ({
                               name="importance"
                               id="importance"
                               defaultValue="1"
-                              onChange={e => setImportance(e.target.value)}
+                              onChange={(e) => setImportance(e.target.value)}
                            />
                         </Col>
                      </Row>
@@ -230,9 +237,10 @@ const ItemModal = ({
                            <Button
                               type="submit"
                               color="dark"
-                              style={{ marginTop: '2rem' }}
+                              style={{ marginTop: "2rem" }}
                               onClick={handleSubmit}
-                              block>
+                              block
+                           >
                               Add Item
                            </Button>
                         </Col>

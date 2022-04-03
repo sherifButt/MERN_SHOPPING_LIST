@@ -61,7 +61,7 @@ router.post('/', auth, async (req, res) => {
          quantity: req.body.quantity,
          importance: req.body.importance,
          pricePerUnit: req.body.pricePerUnit,
-         unit: req.body.pricePerUnit,
+         unit: req.body.unit,
          order: req.body.order,
       });
 

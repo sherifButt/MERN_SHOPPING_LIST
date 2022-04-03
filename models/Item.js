@@ -8,7 +8,7 @@ const ItemSchema = new Schema({
       required: true,
       unique: [
          true,
-         'Item with the same name alredy exisit, find item and cnage its properies, ex: quantitiy or disciriotpn or and featue to the name example: Milk add Swer Milk to the name',
+         'Item with the same name already exists, find item and change its properties, ex: quantity or description or and feature to the name example: Milk add Sawer Milk to the name',
       ],
       minLength: [2, 'Items name should be more than 2 letters'],
    },
@@ -19,7 +19,7 @@ const ItemSchema = new Schema({
    quantity: { type: Number, default: 1 },
    importance: { type: Number, default: 1 },
    pricePerUnit: { type: Number, default: 1 },
-   unit: { type: String, defualt: 'pce' },
+   unit: { type: String, default: 'pce' },
    liks: {
       type: Number,
       default: 0,

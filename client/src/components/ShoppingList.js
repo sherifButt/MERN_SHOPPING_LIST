@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { loginToggle, registerToggle } from '../redux/actions/authActions';
+import { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { loginToggle, registerToggle } from "../redux/actions/authActions";
 
 // REDUX
-import { connect } from 'react-redux';
-import { TransitionGroup } from 'react-transition-group';
+import { connect } from "react-redux";
+import { TransitionGroup } from "react-transition-group";
 import {
    Alert,
    Badge,
@@ -16,17 +16,17 @@ import {
    ListGroupItem,
    Row,
    UncontrolledAlert,
-} from 'reactstrap';
-import { returnErrors } from '../redux/actions/errorActions';
+} from "reactstrap";
+import { returnErrors } from "../redux/actions/errorActions";
 import {
    deleteItem,
    getItems,
    itemDndReArrange,
    itemDndReOrder,
-} from '../redux/actions/itemActions';
+} from "../redux/actions/itemActions";
 
 // COMPONNETNT
-import ItemModal from './ItemModal';
+import ItemModal from "./ItemModal";
 
 const ShoppingList = ({
    getItems,
@@ -47,8 +47,8 @@ const ShoppingList = ({
    }, []);
 
    // html
-   const dash = dragDrop ? <span color="gray"> = </span> : '';
-   const button = _id => {
+   const dash = dragDrop ? <span color="gray"> = </span> : "";
+   const button = (_id) => {
       return (
          <Button
             className="remove-btn ml-3 "
@@ -56,14 +56,15 @@ const ShoppingList = ({
             size="sm"
             onClick={() => {
                deleteItem(_id);
-            }}>
+            }}
+         >
             &times;
          </Button>
       );
    };
 
-   const categoriesList = category_id =>
-      category_id.map(cat => {
+   const categoriesList = (category_id) =>
+      category_id.map((cat) => {
          return (
             <>
                <Badge href="#" color="secondary" className="ml-2">
@@ -72,17 +73,17 @@ const ShoppingList = ({
             </>
          );
       });
-   const purchased = _id => {
+   const purchased = (_id) => {
       return isAuthenticated ? (
          <CustomInput type="checkbox" id={_id} label="" className="ml-3" inline />
       ) : (
-         ''
+         ""
       );
    };
 
    return (
       <DragDropContext
-         onDragEnd={param => {
+         onDragEnd={(param) => {
             const srcI = param.source.index;
             const desI = !!param.destination ? param.destination.index : null;
 
@@ -94,23 +95,24 @@ const ShoppingList = ({
                   item1: { _id: items[desI]._id, srcI: desI, desI: srcI },
                });
             } else {
-               returnErrors('Please log in to re-arrange items...', 403, 'D&D_AUTH_ERROR');
+               returnErrors("Please log in to re-arrange items...", 403, "D&D_AUTH_ERROR");
             }
-         }}>
+         }}
+      >
          <Container>
-            {error.id === 'D&D_AUTH_ERROR' || error.id === 'AUTH_ERROR' ? (
+            {error.id === "D&D_AUTH_ERROR" || error.id === "AUTH_ERROR" ? (
                <UncontrolledAlert color="danger">
-                  {error.msg}{' '}
+                  {error.msg}{" "}
                   <a href="#" onClick={loginToggle}>
                      Login
-                  </a>{' '}
-                  /{' '}
+                  </a>{" "}
+                  /{" "}
                   <a href="#" onClick={registerToggle}>
                      Rigester
                   </a>
                </UncontrolledAlert>
             ) : (
-               ''
+               ""
             )}
             <ItemModal buttonLabel="Add Item" />
             <Row>
@@ -122,10 +124,10 @@ const ShoppingList = ({
                         id="exampleCustomSwitch"
                         name="customSwitch"
                         label="Itmes Re-arrange"
-                        onClick={e => setDragDrop(!dragDrop)}
+                        onClick={(e) => setDragDrop(!dragDrop)}
                      />
                   ) : (
-                     ''
+                     ""
                   )}
                </Col>
             </Row>
@@ -135,12 +137,26 @@ const ShoppingList = ({
                      {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                            {items.map(
-                              ({ _id, name, category_id, description, order, user_id }, i) => (
+                              (
+                                 {
+                                    _id,
+                                    name,
+                                    category_id,
+                                    description,
+                                    order,
+                                    user_id,
+                                    pricePerUnit,
+                                    unit,
+                                    quantity,
+                                 },
+                                 i
+                              ) => (
                                  <Draggable
                                     key={_id}
-                                    draggableId={'draggable-1' + _id}
+                                    draggableId={"draggable-1" + _id}
                                     index={i}
-                                    isDragDisabled={!dragDrop}>
+                                    isDragDisabled={!dragDrop}
+                                 >
                                     {(provided, snapshot) => (
                                        <div
                                           ref={provided.innerRef}
@@ -148,13 +164,15 @@ const ShoppingList = ({
                                           style={{
                                              ...provided.draggableProps.style,
                                              boxShadow: snapshot.isDragging
-                                                ? '0 0 .9rem #66666640'
-                                                : 'none',
+                                                ? "0 0 .9rem #66666640"
+                                                : "none",
                                              // borderRadius: snapshot.isDragging ? '5px' : 'none',
-                                          }}>
+                                          }}
+                                       >
                                           <ListGroupItem
                                              {...provided.dragHandleProps}
-                                             className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between">
+                                             className="mb-2  text-dark fw-light align-items-center py-3 d-flex justify-content-between"
+                                          >
                                              <div className="d-flex align-items-center align-middle">
                                                 <div>
                                                    {dash}
@@ -163,14 +181,48 @@ const ShoppingList = ({
 
                                                 <div className="d-flex  flex-column">
                                                    <span
-                                                      style={{ fontSize: '.7em', color: 'gray' }}>
-                                                      {user_id.name.split(' ')[0]} need's
-                                                   </span>{' '}
-                                                   {name.charAt(0).toUpperCase() + name.slice(1)}
+                                                      style={{
+                                                         fontSize: ".7em",
+                                                         color: "gray",
+                                                         // textTransform: "capitalize",
+                                                      }}
+                                                   >
+                                                      {user_id.name
+                                                         .split(" ")[0]
+                                                         .charAt(0)
+                                                         .toUpperCase() +
+                                                         user_id.name.split(" ")[0]?.slice(1)}{" "}
+                                                      {user_id.name.split(" ")[1] &&
+                                                         user_id.name
+                                                            .split(" ")[1]
+                                                            ?.charAt(0)
+                                                            .toUpperCase()}{" "}
+                                                      need's
+                                                   </span>{" "}
+                                                   <span>
+                                                      <span>{quantity} </span>
+                                                      {name.charAt(0).toUpperCase() + name.slice(1)}
+                                                      {unit && ` ${unit}`}s{" "}
+                                                      <span className="small">
+                                                         {" "}
+                                                         {pricePerUnit &&
+                                                            ` worth of £${(
+                                                               pricePerUnit * quantity
+                                                            ).toFixed(2)}`}
+                                                      </span>
+                                                   </span>
                                                    <span
                                                       className="sm text-sm-left font-weight-light"
-                                                      style={{ fontSize: '.7em', color: 'gray' }}>
-                                                      {description}
+                                                      style={{
+                                                         fontSize: ".7em",
+                                                         color: "gray",
+                                                      }}
+                                                   >
+                                                      {description && `${description}, `}
+                                                      {pricePerUnit &&
+                                                         `costs £${pricePerUnit} per ${
+                                                            unit ? unit : name
+                                                         }`}
                                                    </span>
                                                 </div>
                                              </div>
@@ -195,7 +247,7 @@ const ShoppingList = ({
    );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
    items: state.item.items,
    error: state.error,
    isAuthenticated: state.auth.isAuthenticated,
