@@ -91,7 +91,7 @@ const ItemModal = ({
       e.preventDefault();
       // Add item via addItem action
       const result = await addItem(item);
-      // if item added succfuly retruns true..
+      // if item added successfully returns true..
       if (result) {
          toggle();
          setName('');
@@ -107,6 +107,7 @@ const ItemModal = ({
          </Button>
          <Modal isOpen={modal} toggle={toggle} className={className}>
             <ModalHeader toggle={toggle}>ADD ITEM</ModalHeader>
+            
             <ModalBody>
                {error.id == "ADD_ITEM_ERROR" || error.id == "AUTH_ERROR" ? alert : ""}{" "}
                {error.id == "AUTH_ERROR" ? "hi" : ""}

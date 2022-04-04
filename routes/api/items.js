@@ -38,10 +38,10 @@ router.get('/', async (req, res) => {
          count: co.count(),
       });
    } catch (e) {
-      console.log(`Error geting data form DB! ${e}`);
+      console.log(`Error getting data form DB! ${e}`);
       res.status(404).json({
          success: false,
-         msg: `Error geting data form DB! ${e}`,
+         msg: `Error getting data form DB! ${e}`,
          status: 404,
       });
    }
@@ -72,12 +72,12 @@ router.post('/', auth, async (req, res) => {
             status: 401,
             id: 'DB_ERROR',
          };
-      const retrivedItem = await Item.findById(savedItem.id)
+      const retrievedItem = await Item.findById(savedItem.id)
          .populate({ path: 'user_id', select: '-password' })
          .populate({ path: 'category_id' });
-      res.status(200).json(retrivedItem);
+      res.status(200).json(retrievedItem);
    } catch (e) {
-      console.log(`Error geting data form DB ${e}`);
+      console.log(`Error getting data form DB ${e}`);
       res.status(e.status ? e.status : 400).json({
          success: false,
          msg: e.message,
@@ -94,7 +94,7 @@ router.delete('/:id', auth, async (req, res) => {
    try {
       // find item in database
       const item = await Item.findById(req.params.id);
-      if (!item) throw Error(`item #[${req.params.id}] dosnot exist, nothing to delete`);
+      if (!item) throw Error(`item #[${req.params.id}] doesn't exist, nothing to delete`);
 
       // Remove item
       await item.remove();
@@ -109,7 +109,7 @@ router.delete('/:id', auth, async (req, res) => {
       console.log(`Error geting data form DB`);
       res.status(400).json({
          success: false,
-         message: `Error geting data form DB! ${e}`,
+         message: `Error getting data form DB! ${e}`,
          status: 400,
       });
    }

@@ -24,6 +24,7 @@ import {
    itemDndReArrange,
    itemDndReOrder,
 } from "../redux/actions/itemActions";
+import SubmitOrder  from "./form/SubmitOrder";
 
 // COMPONNETNT
 import ItemModal from "./ItemModal";
@@ -114,7 +115,15 @@ const ShoppingList = ({
             ) : (
                ""
             )}
-            <ItemModal buttonLabel="Add Item" />
+
+            <Row>
+               <Col>
+                  <ItemModal buttonLabel="Add Item" />
+               </Col>
+               <Col>
+                  <SubmitOrder />
+               </Col>
+            </Row>
             <Row>
                <Col>
                   {isAuthenticated ? (
@@ -206,7 +215,7 @@ const ShoppingList = ({
                                                       <span className="small">
                                                          {" "}
                                                          {pricePerUnit &&
-                                                            ` worth of £${(
+                                                            ` worth £${(
                                                                pricePerUnit * quantity
                                                             ).toFixed(2)}`}
                                                       </span>
